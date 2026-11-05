@@ -126,7 +126,7 @@
     lastY = y;
     const bar = $('[data-actionbar]');
     if (bar) {
-      const foot = $('.foot-reveal').getBoundingClientRect().top;
+      const foot = $('.foot').getBoundingClientRect().top;
       const pr = $('.proces').getBoundingClientRect();
       const inOven = pr.top < window.innerHeight * 0.5 && pr.bottom > window.innerHeight * 0.5;
       bar.classList.toggle('is-on', y > window.innerHeight * 0.75 && foot > window.innerHeight * 0.95 && !inOven);
@@ -330,16 +330,6 @@
   }
 
   /* ------------------------------------------------------------------
-     Manifest: split into words for the ink effect
-     ------------------------------------------------------------------ */
-  const ink = $('[data-ink]');
-  if (ink && animate) {
-    const words = ink.textContent.split(' ');
-    ink.setAttribute('aria-label', ink.textContent);
-    ink.innerHTML = words.map(w => `<span class="w" aria-hidden="true">${w}</span>`).join(' ');
-  }
-
-  /* ------------------------------------------------------------------
      GSAP scenes
      ------------------------------------------------------------------ */
   if (!animate) { root.classList.add('ready'); onScroll(); return; }
@@ -364,23 +354,22 @@
     .to('.loaf-spin', { rotate: 90, ease: 'none' }, 0)
     .to('.hero-copy', { yPercent: -18, opacity: 0, ease: 'none', duration: .6 }, 0);
 
-  // 2 · Manifest — words ink in with reading pace
-  if (ink) {
-    const ws = $$('.w', ink);
-    ScrollTrigger.create({
-      trigger: ink, start: 'top 82%', end: 'bottom 50%', scrub: true,
-      onUpdate: self => { const n = Math.round(self.progress * ws.length); ws.forEach((w, i) => w.classList.toggle('on', i < n)); },
+  // 2 · The recipe is weighed out: bars settle onto the scale, numbers count up
+  const scale = $('[data-scale]');
+  if (scale) {
+    const narrow = window.matchMedia('(max-width: 860px)').matches;
+    const tl = gsap.timeline({ scrollTrigger: { trigger: scale, start: 'top 78%', once: true } });
+    tl.from('.ing-bar', narrow ? { scaleX: 0, duration: 1.3, ease: 'expo.out', stagger: .14 } : { scaleY: 0, duration: 1.3, ease: 'expo.out', stagger: .14 }, 0);
+    $$('[data-to]', $('.recipe')).forEach((el, i) => {
+      const to = +el.dataset.to, o = { v: 0 };
+      const isTime = !!el.closest('.recipe-time');
+      el.textContent = '0';
+      tl.to(o, { v: to, duration: isTime ? 1.6 : 1.1, ease: 'power2.out', onUpdate: () => { el.textContent = Math.round(o.v); } }, isTime ? .7 : i * .14);
     });
+    tl.from('.recipe-note', { opacity: 0, y: 12, duration: .9, ease: 'expo.out' }, 1.2);
   }
-  gsap.from('.facts li', { y: 30, opacity: 0, duration: 1, ease: 'expo.out', stagger: .1, scrollTrigger: { trigger: '.facts', start: 'top 88%', once: true } });
 
-  // 2 → 3 · The oven opens: a dark circle swells into the whole screen
   const pin = $('.proces-pin');
-  gsap.fromTo(pin, { clipPath: 'circle(6% at 50% 50%)' }, {
-    clipPath: 'circle(75% at 50% 50%)', ease: 'none',
-    scrollTrigger: { trigger: pin, start: 'top bottom', end: 'top top', scrub: true },
-  });
-  gsap.from('.proces-grid', { scale: .9, ease: 'none', scrollTrigger: { trigger: pin, start: 'top bottom', end: 'top top', scrub: true } });
 
   // 3 · Dough becomes bread — pinned, the clock runs to 48 h
   const stages = $$('[data-stage]'), steps = $$('[data-step]'), hrs = $('[data-hours]'), ring = $('[data-ring]');
@@ -409,7 +398,7 @@
 
   // Nav turns light over dark rooms
   ScrollTrigger.create({ trigger: '.proces', start: 'top 40px', end: 'bottom 40px', toggleClass: { targets: nav, className: 'is-dark' } });
-  ScrollTrigger.create({ trigger: '.foot-reveal', start: 'top 40px', end: 'bottom top', toggleClass: { targets: nav, className: 'is-dark' } });
+  ScrollTrigger.create({ trigger: '.foot', start: 'top 40px', end: 'bottom top', toggleClass: { targets: nav, className: 'is-dark' } });
 
   // 3 → 4 · A crust-shaped edge rises over the oven and settles flat
   gsap.fromTo('[data-crust]', { scaleY: 1 }, {
@@ -442,10 +431,6 @@
     gsap.from($$('.ch', street), { yPercent: 105, duration: 1.4, ease: 'expo.out', stagger: .05, scrollTrigger: { trigger: '[data-street]', start: 'top 85%', once: true } });
   }
   gsap.from('.visit-grid > *', { y: 30, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: .1, scrollTrigger: { trigger: '.visit-grid', start: 'top 88%', once: true } });
-
-  // 6 → 7 · The page lifts like a cloth; the name rises underneath
-  gsap.fromTo('[data-footword]', { yPercent: 55 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '.foot-reveal', start: 'top bottom', end: 'bottom bottom', scrub: true } });
-  gsap.fromTo('.foot-top', { y: 80, opacity: .2 }, { y: 0, opacity: 1, ease: 'none', scrollTrigger: { trigger: '.foot-reveal', start: 'top bottom', end: 'top 30%', scrub: true } });
 
   mm.add('(max-width: 860px)', () => {
     // smaller travel on phones

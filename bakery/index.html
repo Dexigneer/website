@@ -24,7 +24,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..500&family=Geist:wght@400..600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..600,0..100,0..1;1,9..144,300..600,0..100,0..1&family=Geist:wght@400..600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="preload" as="image" href="assets/img/sourdough-loaf.webp" imagesrcset="assets/img/sourdough-loaf-800.webp 800w, assets/img/sourdough-loaf.webp 1400w" imagesizes="(max-width: 860px) 118vw, min(78vw, 96vh, 1000px)" type="image/webp" fetchpriority="high">
   <link rel="stylesheet" href="styles.css">
   <script type="application/ld+json">
@@ -61,7 +61,7 @@
   <a class="skip" href="#counter">Skip to today's bread</a>
 
   <header class="nav" id="nav">
-    <a class="logo" href="#top" aria-label="KVAS — back to top">KVAS</a>
+    <a class="logo" href="#top" aria-label="Kvas, back to top"><span class="logo-word">kvas</span><span class="logo-tag">48h</span></a>
     <nav class="nav-links" aria-label="Main">
       <a href="#process">Process</a>
       <a href="#counter">Counter</a>
@@ -113,15 +113,23 @@
       </div>
     </section>
 
-    <!-- 2 · MANIFESTO — words ink in as you read -->
-    <section class="manifest" aria-label="How we bake">
+    <!-- 2 · RECIPE — the whole recipe, set by weight -->
+    <section class="recipe" aria-labelledby="recipe-title">
       <div class="wrap">
-        <p class="manifest-text" data-ink>We don't bake fast. We bake the way bread was always made&nbsp;— with a starter we feed every morning, flour stone-milled near Trnava, and the one ingredient nobody can&nbsp;sell&nbsp;you: time.</p>
-        <ul class="facts">
-          <li><b>4</b><span>ingredients</span></li>
-          <li><b>48 h</b><span>of fermentation</span></li>
-          <li><b>250 °C</b><span>stone oven</span></li>
-        </ul>
+        <div class="recipe-head">
+          <h2 id="recipe-title" class="recipe-title">The whole recipe.</h2>
+          <p class="label recipe-yield">1 loaf · 1 kg</p>
+        </div>
+        <ol class="scale" data-scale>
+          <li class="ing" style="--g:500; --fs:clamp(72px, 15vw, 236px)"><p class="ing-qty"><span data-to="500">500</span><small>g</small></p><p class="ing-name">Flour</p><span class="ing-bar"></span><span class="ing-pct">100%</span></li>
+          <li class="ing" style="--g:390; --fs:clamp(56px, 11.7vw, 184px)"><p class="ing-qty"><span data-to="390">390</span><small>g</small></p><p class="ing-name">Water</p><span class="ing-bar"></span><span class="ing-pct">78%</span></li>
+          <li class="ing" style="--g:100; --fs:clamp(20px, 3vw, 48px)"><p class="ing-qty"><span data-to="100">100</span><small>g</small></p><p class="ing-name">Starter</p><span class="ing-bar"></span><span class="ing-pct">20%</span></li>
+          <li class="ing ing--salt" style="--g:10; --fs:12px"><p class="ing-qty"><span data-to="10">10</span><small>g</small></p><p class="ing-name">Salt</p><span class="ing-bar"></span><span class="ing-pct">2%</span></li>
+        </ol>
+        <div class="recipe-foot">
+          <p class="recipe-time"><span class="recipe-plus" aria-hidden="true">+</span><span data-to="48">48</span>&nbsp;<em>hours</em></p>
+          <p class="recipe-note">The one ingredient we don't weigh. It goes into every loaf, every night.</p>
+        </div>
       </div>
     </section>
 
@@ -281,21 +289,19 @@
     </section>
   </main>
 
-  <!-- 7 · FOOTER — revealed beneath the page like lifting a cloth -->
-  <div class="foot-reveal">
-    <footer class="foot">
-      <div class="wrap foot-top">
-        <p class="foot-say">See you<br><em>at sunrise.</em></p>
-        <div class="foot-cols">
-          <div><p class="label label--dim">Write</p><a href="mailto:hello@kvas.example">hello@kvas.example</a></div>
-          <div><p class="label label--dim">Follow</p><a href="#" aria-disabled="true">Instagram</a></div>
-          <div><p class="label label--dim">Up</p><a href="#top">Back to top ↑</a></div>
-        </div>
-      </div>
-      <p class="foot-word" aria-hidden="true" data-footword>KVAS</p>
-      <div class="wrap foot-base"><span>© 2026 KVAS Bakery</span><span>Panská · Old Town · Bratislava</span></div>
-    </footer>
-  </div>
+  <!-- 7 · FOOTER — small and plain -->
+  <footer class="foot">
+    <div class="wrap foot-row">
+      <a class="logo logo--foot" href="#top" aria-label="Kvas, back to top"><span class="logo-word">kvas</span><span class="logo-tag">48h</span></a>
+      <p class="foot-addr">Panská, Old Town, Bratislava<br><span>Mon–Fri 7:00–19:00 · Sat 7:30–14:00</span></p>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="mailto:hello@kvas.example">hello@kvas.example</a>
+        <a href="#" aria-disabled="true">Instagram</a>
+        <a href="#top">Back to top ↑</a>
+      </nav>
+    </div>
+    <div class="wrap foot-base"><span>© 2026 Kvas Bakery</span><span>Made slowly in Bratislava</span></div>
+  </footer>
 
   <!-- Mobile action bar -->
   <div class="actionbar" data-actionbar>
