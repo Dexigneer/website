@@ -30,7 +30,7 @@
 
   /* ---------- manifesto words ---------- */
   const manifesto = $('#manifesto');
-  manifesto.innerHTML = manifesto.textContent.trim().split(/\s+/).map(w => `<span class="mw">${w}</span>`).join(' ');
+  manifesto.innerHTML = manifesto.textContent.trim().split(/[ \t\n\r]+/).map(w => `<span class="mw">${w}</span>`).join(' ');
   const mWords = $$('.mw', manifesto);
 
   /* ---------- hero packs ---------- */
