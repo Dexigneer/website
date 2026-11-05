@@ -38,23 +38,22 @@
   packsEl.innerHTML = FLAVOURS.map((f, i) => `
     <button class="pack" type="button" style="--i:${i}" data-i="${i}" aria-label="${f.name} — see flavour">
       <span class="pack-body">
-        <span class="pack-label"><b>0${i + 1}</b>${f.name}</span>
+        <span class="pack-label">${f.name}</span>
         <img class="pack-img" src="${IMG}" width="438" height="1391" alt="" draggable="false">
       </span>
     </button>`).join('');
   const packs = $$('.pack', packsEl);
-  $$('.hero-grid i').forEach((el, i) => el.style.setProperty('--i', i));
 
   /* ---------- flavours module ---------- */
   const list = $('#flList');
   list.innerHTML = FLAVOURS.map((f, i) => `
     <li class="fl-item">
       <button class="fl-btn" role="tab" type="button" data-i="${i}" aria-selected="${i === 0}">
-        <span class="n">0${i + 1}</span><span class="name">${f.name}</span>${f.caf !== '—' ? '<span class="tag">Caffeine</span>' : ''}
+        <span class="name">${f.name}</span>${f.caf !== '—' ? '<span class="tag">Caffeine</span>' : ''}
       </button>
     </li>`).join('');
   const tabs = $$('.fl-btn', list);
-  const flWord = $('#flWord'), flPack = $('#flPack'), flIndex = $('#flIndex');
+  const flWord = $('#flWord'), flPack = $('#flPack');
   const flName = $('#flName'), flNote = $('#flNote'), flSodium = $('#flSodium'), flCaf = $('#flCaf');
   let current = 0;
 
@@ -93,7 +92,6 @@
       ], { duration: 900, easing: 'cubic-bezier(.23,1,.32,1)' });
     }
 
-    flIndex.textContent = String(i + 1).padStart(2, '0');
     flName.textContent = f.name; flNote.textContent = f.note;
     flSodium.textContent = f.sodium; flCaf.textContent = f.caf;
     [flName, flNote, flSodium, flCaf].forEach(el => { el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap'); });
@@ -133,6 +131,7 @@
 
   $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
     const id = a.getAttribute('href');
+    if (a.hasAttribute('data-close-cart')) closeCart(false);
     const el = id === '#top' ? document.body : $(id);
     if (!el) return;
     e.preventDefault();
@@ -142,18 +141,133 @@
     scrollToY(y);
   }));
 
-  /* ---------- cart & toast ---------- */
+  /* ---------- cart ---------- */
+  const PRODUCTS = Object.fromEntries([
+    ...FLAVOURS.map((f, i) => [`gel-${i}`, { name: f.name, sub: 'Energy gel · 60 ml', price: 3.2 }]),
+    ['box', { name: 'Starter box', sub: 'All six flavours · 12 gels', price: 36 }],
+  ]);
+  const FREE_SHIP = 40, SHIP = 4.9, MAX_QTY = 99;
+  const eur = n => '€' + n.toFixed(2);
+  const STORE_KEY = 'velor-cart';
+  const load = raw => { try { return (JSON.parse(raw) || []).filter(it => PRODUCTS[it.id] && it.qty > 0); } catch (_) { return []; } };
+  let items = [];
+  try { items = load(localStorage.getItem(STORE_KEY)); } catch (_) { items = []; }
+  const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(items)); } catch (_) {} };
+
+  const cartEl = $('#cart'), scrim = $('#cartScrim'), cartItems = $('#cartItems'), cartDone = $('#cartDone');
   const cartCount = $('#cartCount'), toast = $('#toast');
-  let cart = 0, toastT;
-  function addToCart(n, label) {
-    cart += n; cartCount.textContent = cart;
-    cartCount.classList.remove('bump'); void cartCount.offsetWidth; cartCount.classList.add('bump');
-    toast.textContent = `${label} added`;
+  let toastT, lastFocus = null;
+
+  function showToast(text) {
+    toast.textContent = text;
     toast.classList.add('show'); clearTimeout(toastT);
     toastT = setTimeout(() => toast.classList.remove('show'), 2200);
   }
-  $('#flAdd').addEventListener('click', () => addToCart(1, FLAVOURS[current].name));
-  $('#boxAdd').addEventListener('click', () => addToCart(12, 'Starter box'));
+
+  function renderCart() {
+    const qty = items.reduce((s, it) => s + it.qty, 0);
+    const sub = items.reduce((s, it) => s + it.qty * PRODUCTS[it.id].price, 0);
+    const ship = qty === 0 || sub >= FREE_SHIP ? 0 : SHIP;
+    cartCount.textContent = qty;
+    $('#cartOpen').setAttribute('aria-label', `Cart, ${qty} item${qty === 1 ? '' : 's'}`);
+    $('#cartHeadCount').textContent = qty;
+    $('#cartSubtotal').textContent = eur(sub);
+    $('#cartShipping').textContent = qty === 0 ? '—' : ship === 0 ? 'Free' : eur(ship);
+    $('#cartTotal').textContent = eur(sub + ship);
+    $('#cartCheckoutPrice').textContent = eur(sub + ship);
+    const left = FREE_SHIP - sub;
+    $('#cartShipText').textContent = left > 0 ? `${eur(left)} away from free shipping` : 'Free shipping unlocked';
+    $('#cartShipBar').style.transform = `scaleX(${clamp(sub / FREE_SHIP)})`;
+    const empty = qty === 0, done = !cartDone.hidden;
+    $('#cartEmpty').hidden = !empty || done;
+    $('#cartFoot').hidden = empty || done;
+    $('#cartShip').hidden = empty || done;
+    cartItems.hidden = done;
+    const pic = `<img src="${IMG}" alt="" width="438" height="1391">`;
+    cartItems.innerHTML = items.map(it => {
+      const p = PRODUCTS[it.id];
+      return `<li class="ci" data-id="${it.id}">
+        <div class="ci-img${it.id === 'box' ? ' ci-img--box' : ''}">${it.id === 'box' ? pic + pic + pic : pic}</div>
+        <div class="ci-body">
+          <div class="ci-top"><p class="ci-name">${p.name}</p><p class="ci-price">${eur(p.price * it.qty)}</p></div>
+          <p class="ci-sub">${p.sub}</p>
+          <div class="ci-bottom">
+            <div class="qty" role="group" aria-label="Quantity of ${p.name}">
+              <button type="button" data-act="dec" aria-label="Decrease quantity">−</button>
+              <span>${it.qty}</span>
+              <button type="button" data-act="inc" aria-label="Increase quantity"${it.qty >= MAX_QTY ? ' disabled' : ''}>+</button>
+            </div>
+            <button type="button" class="ci-remove" data-act="remove">Remove</button>
+          </div>
+        </div>
+      </li>`;
+    }).join('');
+  }
+
+  function bump() { cartCount.classList.remove('bump'); void cartCount.offsetWidth; cartCount.classList.add('bump'); }
+
+  function addToCart(id, n = 1) {
+    cartDone.hidden = true;
+    const it = items.find(x => x.id === id);
+    if (it) it.qty = Math.min(MAX_QTY, it.qty + n); else items.push({ id, qty: n });
+    save(); renderCart(); bump();
+    showToast(`${PRODUCTS[id].name} added to cart`);
+  }
+
+  cartItems.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-act]'); if (!btn) return;
+    const id = btn.closest('.ci').dataset.id, act = btn.dataset.act;
+    const it = items.find(x => x.id === id); if (!it) return;
+    if (act === 'inc') it.qty = Math.min(MAX_QTY, it.qty + 1);
+    if (act === 'dec') it.qty -= 1;
+    if (act === 'remove' || it.qty <= 0) items = items.filter(x => x !== it);
+    save(); renderCart();
+    const again = $(`.ci[data-id="${id}"] [data-act="${act}"]`, cartItems);
+    (again && !again.disabled ? again : $('#cartClose')).focus({ preventScroll: true });
+  });
+
+  const isOpen = () => cartEl.classList.contains('open');
+  function openCart() {
+    if (isOpen()) return;
+    lastFocus = document.activeElement;
+    scrim.hidden = false; cartEl.inert = false; cartEl.setAttribute('aria-hidden', 'false');
+    document.documentElement.classList.add('cart-lock');
+    requestAnimationFrame(() => requestAnimationFrame(() => { scrim.classList.add('open'); cartEl.classList.add('open'); }));
+    setTimeout(() => $('#cartClose').focus({ preventScroll: true }), 60);
+  }
+  function closeCart(restoreFocus = true) {
+    if (!isOpen()) return;
+    scrim.classList.remove('open'); cartEl.classList.remove('open');
+    cartEl.inert = true; cartEl.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('cart-lock');
+    setTimeout(() => { if (!isOpen()) scrim.hidden = true; }, 500);
+    if (!cartDone.hidden) { cartDone.hidden = true; renderCart(); }
+    if (restoreFocus) lastFocus?.focus?.({ preventScroll: true });
+  }
+  $('#cartOpen').addEventListener('click', openCart);
+  $('#cartClose').addEventListener('click', () => closeCart());
+  $('#cartDoneClose').addEventListener('click', () => closeCart());
+  scrim.addEventListener('click', () => closeCart());
+  addEventListener('keydown', e => {
+    if (!isOpen()) return;
+    if (e.key === 'Escape') { closeCart(); return; }
+    if (e.key === 'Tab') { // keep focus inside the drawer
+      const f = $$('button:not([disabled]), a[href]', cartEl).filter(el => el.offsetParent !== null);
+      if (!f.length) return;
+      if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+    }
+  });
+  $('#cartCheckout').addEventListener('click', () => {
+    items = []; save();
+    cartDone.hidden = false; renderCart();
+    $('#cartDoneClose').focus({ preventScroll: true });
+  });
+  addEventListener('storage', e => { if (e.key === STORE_KEY) { items = load(e.newValue); renderCart(); } });
+
+  $('#flAdd').addEventListener('click', () => addToCart(`gel-${current}`));
+  $('#boxAdd').addEventListener('click', () => { addToCart('box'); openCart(); });
+  renderCart();
   $('#news').addEventListener('submit', e => {
     e.preventDefault();
     const input = $('#email'), msg = $('#newsMsg');
@@ -171,7 +285,7 @@
   }
 
   /* ---------- scroll choreography ---------- */
-  const intro = $('#intro'), heroCopy = $('.hero-copy'), heroTrack = $('.hero-track'), blackout = $('#blackout');
+  const intro = $('#intro'), heroCopy = $('.hero-copy'), blackout = $('#blackout');
   const formula = $('#formula'), aperture = $('#aperture'), track = $('#track'), bar = $('#formulaBar');
   const counts = $$('.count', track), stats = $$('.stat', track);
   const route = $('#route'), routeLine = $('#routeLine'), routeFill = $('.route-fill'), steps = $$('.step');
@@ -193,7 +307,6 @@
     const copyT = clamp(p / .2);
     heroCopy.style.opacity = 1 - easeOut(copyT);
     heroCopy.style.transform = `translateY(calc(-50% - ${copyT * 60}px)) scale(${1 - copyT * .06})`;
-    heroTrack.style.transform = `translate(-50%, -50%) scale(${1 + p * .6})`;
 
     const discT = easeIO(clamp((p - .05) / .32));
     const R = Math.hypot(vw / 2, vh) * 1.02;
