@@ -293,44 +293,36 @@ html.cart-lock, html.cart-lock body { overflow: hidden; }
 }
 
 /* ==========================================================================
-   FORMULA — a black panel; heading and numbers rise in, then run sideways
+   FORMULA — a plain black band: heading, then four numbers in a row
    ========================================================================== */
-.formula { position: relative; height: 380vh; background: var(--ink); }
-.formula-stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.formula { position: relative; background: var(--ink); }
+.formula-stage { position: relative; }
 .formula-panel {
-  position: absolute; inset: 0; background: var(--ink); color: var(--paper);
-  display: flex; flex-direction: column; justify-content: center; gap: clamp(40px, 7vh, 72px);
-  padding-top: var(--nav-h);
+  position: relative; background: var(--ink); color: var(--paper);
+  padding: clamp(72px, 9vh, 96px) 0 clamp(80px, 10vh, 104px);
 }
-.formula-head { padding: 0 var(--gutter); }
-.formula-head h2 { max-width: 12ch; }
+.formula-head { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--gutter); }
 .track {
-  position: relative;
-  display: flex; padding-left: max(var(--gutter), 38vw);
-  will-change: transform;
+  width: 100%; max-width: var(--max); margin: var(--head-gap) auto 0; padding: 0 var(--gutter);
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(20px, 2.5vw, 40px);
 }
 .stat {
-  flex: 0 0 auto; width: clamp(280px, 34vw, 520px);
-  padding: 0 clamp(20px, 3vw, 48px) 0 clamp(20px, 2.2vw, 32px);
-  border-left: 1px solid var(--line-inv);
-  display: flex; flex-direction: column; gap: 14px;
-  opacity: 0; transform: translate3d(0, 40px, 0);
-  transition: opacity .9s var(--ease-out), transform 1.1s var(--ease-out);
-  transition-delay: calc(var(--i, 0) * 90ms + 150ms);
+  padding-top: 20px; border-top: 1px solid var(--line-inv);
+  display: flex; flex-direction: column; gap: 10px;
+  opacity: 0; transform: translate3d(0, 24px, 0);
+  transition: opacity .8s var(--ease-out), transform .9s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 80ms);
 }
 .formula-panel.in .stat { opacity: 1; transform: none; }
 .stat:nth-child(2) { --i: 1; } .stat:nth-child(3) { --i: 2; } .stat:nth-child(4) { --i: 3; }
 .stat-n {
-  font-weight: 600; font-size: clamp(96px, 15vw, 240px); line-height: .82; letter-spacing: -.07em;
-  font-variant-numeric: tabular-nums; margin: 18px 0 18px -.04em;
-  white-space: nowrap;
+  font-weight: 600; font-size: clamp(48px, 5vw, 80px); line-height: .9; letter-spacing: -.05em;
+  font-variant-numeric: tabular-nums; margin: 6px 0 8px -.03em; white-space: nowrap;
 }
-.stat-n small { font-size: .3em; letter-spacing: -.02em; margin-left: .12em; color: var(--mute-inv); font-weight: 500; }
-.stat h3 { font-weight: 500; font-size: 20px; letter-spacing: -.02em; }
-.stat p:last-child { color: var(--mute-inv); font-size: 15px; max-width: 34ch; }
-.formula-bar { position: absolute; left: var(--gutter); right: var(--gutter); bottom: 28px; height: 1px; background: var(--line-inv); opacity: 0; transition: opacity .6s .6s; }
-.formula-panel.in .formula-bar { opacity: 1; }
-.formula-bar i { position: absolute; inset: 0; background: var(--paper); transform-origin: left; transform: scaleX(0); }
+.stat-n small { font-size: .36em; letter-spacing: -.01em; margin-left: .12em; color: var(--mute-inv); font-weight: 500; }
+.stat h3 { font-weight: 500; font-size: 18px; letter-spacing: -.02em; }
+.stat p:last-child { color: var(--mute-inv); font-size: 15px; max-width: 30ch; }
+.formula-bar { display: none; }
 
 /* ==========================================================================
    PROTOCOL — the course draws itself as you read
@@ -494,6 +486,7 @@ main { position: relative; z-index: 2; background: var(--paper); }
    RESPONSIVE
    ========================================================================== */
 @media (max-width: 1024px) {
+  .track { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 40px; }
   .fl { grid-template-columns: 1fr 1fr; }
   .fl-list { grid-column: 1 / -1; display: flex; gap: 8px; overflow-x: auto; border: 0; scrollbar-width: none; margin: 0 calc(var(--gutter) * -1); padding: 0 var(--gutter); }
   .fl-list::-webkit-scrollbar { display: none; }
@@ -550,20 +543,15 @@ main { position: relative; z-index: 2; background: var(--paper); }
   .btn--ink, .btn--paper { min-width: 0; width: 100%; }
 
   /* formula: no pinning on phones; a calm 2x2 grid of numbers */
-  .formula { height: auto; }
-  .formula-stage { position: relative; height: auto; overflow: visible; }
-  .formula-panel { position: relative; display: block; padding: calc(var(--nav-h) + 48px) var(--gutter) 72px; }
-  .formula-head { padding: 0; }
+  .formula-panel { padding: 64px 0 72px; }
   .formula-head h2 { max-width: 9ch; }
   .track {
-    position: static; transform: none !important; padding: 0; margin-top: 44px;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 40px 16px;
+    margin-top: 40px; gap: 40px 16px;
   }
-  .stat { width: auto; padding: 16px 0 0; border-left: 0; border-top: 1px solid var(--line-inv); gap: 8px; }
+  .stat { padding-top: 16px; gap: 8px; }
   .stat-n { font-size: clamp(56px, 17vw, 96px); margin: 10px 0 8px -.04em; }
   .stat h3 { font-size: 16px; }
   .stat p:last-child { font-size: 14px; }
-  .formula-bar { display: none; }
 
   .steps { grid-template-columns: 1fr; gap: 36px; }
   .foot-top { flex-direction: column; align-items: stretch; }
@@ -597,10 +585,8 @@ main { position: relative; z-index: 2; background: var(--paper); }
   .flavours { min-height: 0; }
   .fl { grid-template-columns: 1fr 1fr; }
   .fl-stage { height: 70vh; min-height: 240px; }
-  .formula-panel { gap: 20px; }
   .formula-head h2 { font-size: 30px; }
-  .stat-n { font-size: 22vh; margin: 6px 0; }
-  .stat p:last-child { display: none; }
+
   .foot { position: relative; padding-top: 56px; }
 }
 

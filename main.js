@@ -262,7 +262,7 @@
 
   /* ---------- scroll choreography ---------- */
   const intro = $('#intro'), heroCopy = $('.hero-copy'), blackout = $('#blackout');
-  const formula = $('#formula'), panel = $('#formulaPanel'), track = $('#track'), bar = $('#formulaBar');
+  const formula = $('#formula'), panel = $('#formulaPanel'), track = $('#track');
   const counts = $$('.count', track), stats = $$('.stat', track);
   const route = $('#route'), routeLine = $('#routeLine'), routeFill = $('.route-fill'), steps = $$('.step');
   const navEl = $('#nav'), footEl = $('#shop');
@@ -305,18 +305,10 @@
     const landT = clamp(1 - fr.top / vh);
     flavoursSec.style.setProperty('--r', `${(1 - easeOut(landT)) * Math.min(vw * .06, 72)}px`);
 
-    /* FORMULA: content rises in, then the track runs horizontally */
-    const q = progress(formula);
-    const fTop = formula.getBoundingClientRect().top;
-    if (fTop < vh * .45) panel.classList.add('in');
-    const stacked = mqMobile.matches;
-    const runT = stacked ? 0 : clamp((q - .08) / .84);
-    const maxX = Math.max(0, track.scrollWidth - vw + vw * .06);
-    track.style.transform = `translate3d(${-runT * maxX}px,0,0)`;
-    bar.style.transform = `scaleX(${runT})`;
-    stats.forEach((s, i) => {
-      const r = s.getBoundingClientRect();
-      if (stacked ? r.top < vh * .9 && panel.classList.contains('in') : r.left < vw * .85 && fTop < vh * .2) { const c = $('.count', s); if (c) countUp(c); }
+    /* FORMULA: numbers rise in once and count up */
+    if (track.getBoundingClientRect().top < vh * .85) panel.classList.add('in');
+    if (panel.classList.contains('in')) stats.forEach(s => {
+      if (s.getBoundingClientRect().top < vh * .9) { const c = $('.count', s); if (c) countUp(c); }
     });
 
     /* PROTOCOL: draw the course */
