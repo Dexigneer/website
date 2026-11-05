@@ -8,14 +8,15 @@
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const FLAVOURS = [
-    { name: 'Blood Orange', note: 'Bright, sharp, a little bitter.', sodium: '200 mg', caf: '—' },
-    { name: 'Citrus Salt', note: 'Lemon zest and sea salt. Built for heat.', sodium: '400 mg', caf: '—' },
-    { name: 'Wild Berry', note: 'Dark fruit, soft finish.', sodium: '200 mg', caf: '—' },
-    { name: 'Cola Kick', note: 'Classic cola. For the final 10 km.', sodium: '200 mg', caf: '100 mg' },
-    { name: 'Cold Mint', note: 'Cool and clean. Wakes you up.', sodium: '200 mg', caf: '50 mg' },
-    { name: 'Pure', note: 'Unflavoured. Nothing but fuel.', sodium: '200 mg', caf: '—' },
+    { key: 'orange', name: 'Orange', note: 'Bright and juicy, with a little zest.', sodium: '200 mg', caf: '—' },
+    { key: 'lemon', name: 'Lemon', note: 'Sharp citrus with sea salt. Built for heat.', sodium: '400 mg', caf: '—' },
+    { key: 'berry', name: 'Berry', note: 'Dark fruit with a caffeine kick.', sodium: '200 mg', caf: '100 mg' },
+    { key: 'tropical', name: 'Tropical', note: 'Mango and pineapple. Soft and sweet.', sodium: '200 mg', caf: '—' },
+    { key: 'green-apple', name: 'Green Apple', note: 'Crisp and clean. Wakes you up.', sodium: '200 mg', caf: '50 mg' },
+    { key: 'peach', name: 'Peach', note: 'Mellow and easy on the stomach.', sodium: '200 mg', caf: '—' },
   ];
-  const IMG = 'assets/velor-gel.webp';
+  const imgOf = key => `assets/gel-${key}.webp`;
+  const IMG_W = 390, IMG_H = 1100;
 
   /* ---------- split headings into masked words ---------- */
   $$('[data-split]').forEach(el => {
@@ -38,7 +39,7 @@
   packsEl.innerHTML = FLAVOURS.map((f, i) => `
     <button class="pack" type="button" style="--i:${i}" data-i="${i}" aria-label="${f.name} — see flavour">
       <span class="pack-body">
-        <img class="pack-img" src="${IMG}" width="438" height="1391" alt="" draggable="false">
+        <img class="pack-img" src="${imgOf(f.key)}" width="${IMG_W}" height="${IMG_H}" alt="" draggable="false">
       </span>
     </button>`).join('');
   const packs = $$('.pack', packsEl);
@@ -68,7 +69,10 @@
       list.scrollTo({ left: t.offsetLeft - (list.clientWidth - t.offsetWidth) / 2, behavior: instant ? 'auto' : 'smooth' });
     }
 
-    // pack dips out and springs back
+    // pack dips out, changes, and springs back
+    const src = imgOf(f.key);
+    if (reduce || instant) flPack.src = src;
+    else setTimeout(() => { if (current === i) flPack.src = src; }, 330);
     if (!reduce && !instant) {
       flPack.animate([
         { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
@@ -167,11 +171,11 @@
     $('#cartEmpty').hidden = !empty;
     $('#cartFoot').hidden = empty;
     $('#cartShip').hidden = empty;
-    const pic = `<img src="${IMG}" alt="" width="438" height="1391">`;
+    const pic = key => `<img src="${imgOf(key)}" alt="" width="${IMG_W}" height="${IMG_H}">`;
     cartItems.innerHTML = items.map(it => {
       const p = PRODUCTS[it.id];
       return `<li class="ci" data-id="${it.id}">
-        <div class="ci-img${it.id === 'box' ? ' ci-img--box' : ''}">${it.id === 'box' ? pic + pic + pic : pic}</div>
+        <div class="ci-img${it.id === 'box' ? ' ci-img--box' : ''}">${it.id === 'box' ? pic('orange') + pic('berry') + pic('tropical') : pic(FLAVOURS[+it.id.split('-')[1]].key)}</div>
         <div class="ci-body">
           <div class="ci-top"><p class="ci-name">${p.name}</p><p class="ci-price">${eur(p.price * it.qty)}</p></div>
           <p class="ci-sub">${p.sub}</p>
@@ -336,6 +340,8 @@
     // after the entrance, packs switch to snappy hover transitions
     setTimeout(() => packs.forEach(p => p.classList.add('ready')), 1900);
   };
-  const img = new Image(); img.src = IMG;
+  // warm every flavour picture; start once the hero packs are decoded
+  FLAVOURS.forEach(f => { const im = new Image(); im.src = imgOf(f.key); });
+  const img = $('.pack-img');
   (img.decode ? img.decode() : Promise.resolve()).catch(() => {}).then(() => requestAnimationFrame(start));
 })();

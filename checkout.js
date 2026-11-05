@@ -2,8 +2,9 @@
 (() => {
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
-  const IMG = 'assets/velor-gel.webp';
-  const NAMES = ['Blood Orange', 'Citrus Salt', 'Wild Berry', 'Cola Kick', 'Cold Mint', 'Pure'];
+  const KEYS = ['orange', 'lemon', 'berry', 'tropical', 'green-apple', 'peach'];
+  const NAMES = ['Orange', 'Lemon', 'Berry', 'Tropical', 'Green Apple', 'Peach'];
+  const imgOf = key => `assets/gel-${key}.webp`;
   const PRODUCTS = Object.fromEntries([
     ...NAMES.map((n, i) => [`gel-${i}`, { name: n, sub: 'Energy gel · 60 ml', price: 3.2 }]),
     ['box', { name: 'Starter box', sub: 'All six flavours · 12 gels', price: 36 }],
@@ -30,11 +31,11 @@
       $('#coGrid').hidden = true; $('#coEmpty').hidden = false;
       return;
     }
-    const pic = `<img src="${IMG}" alt="" width="438" height="1391">`;
+    const pic = key => `<img src="${imgOf(key)}" alt="" width="390" height="1100">`;
     $('#coItems').innerHTML = items.map(it => {
       const p = PRODUCTS[it.id];
       return `<li class="ci">
-        <div class="ci-img${it.id === 'box' ? ' ci-img--box' : ''}">${it.id === 'box' ? pic + pic + pic : pic}<span class="co-qty">${it.qty}</span></div>
+        <div class="ci-img${it.id === 'box' ? ' ci-img--box' : ''}">${it.id === 'box' ? pic('orange') + pic('berry') + pic('tropical') : pic(KEYS[+it.id.split('-')[1]])}<span class="co-qty">${it.qty}</span></div>
         <div class="ci-body">
           <div class="ci-top"><p class="ci-name">${p.name}</p><p class="ci-price">${eur(p.price * it.qty)}</p></div>
           <p class="ci-sub">${p.sub}</p>

@@ -163,7 +163,7 @@ html.cart-lock, html.cart-lock body { overflow: hidden; }
    the hit area doesn't, so the lift can't slide out from under the cursor. */
 .pack::before {
   content: ""; position: absolute; left: 0; bottom: 0; width: var(--w);
-  height: calc(var(--w) * 3.176 * var(--show, .5));
+  height: calc(var(--w) * 2.82 * var(--show, .5));
 }
 .pack-body { pointer-events: none; }
 .pack.sunk { pointer-events: none; }
