@@ -253,12 +253,24 @@ html.cart-lock, html.cart-lock body { overflow: hidden; }
   position: relative; height: clamp(380px, 58vh, 580px);
 }
 .fl-list, .fl-info { position: relative; z-index: 1; }
-.fl-pack {
-  position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; height: 100%; width: auto;
+.fl-float {
+  position: absolute; inset: 0;
   filter: drop-shadow(0 40px 50px rgba(0, 0, 0, .14));
   animation: float 6s ease-in-out infinite;
 }
+.fl-pack {
+  position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; height: 100%; width: auto;
+  will-change: transform, opacity;
+}
 @keyframes float { 50% { translate: 0 -10px; } }
+/* soft-edged fill used while one pack replaces another */
+.fl-pack.fl-filling {
+  -webkit-mask-image: linear-gradient(to top, #000 47%, transparent 53%);
+          mask-image: linear-gradient(to top, #000 47%, transparent 53%);
+  -webkit-mask-size: 100% 300%; mask-size: 100% 300%;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: 0 100%; mask-position: 0 100%;
+}
 .fl-info { display: flex; flex-direction: column; gap: 22px; }
 .fl-name { font-weight: 600; font-size: clamp(28px, 2.6vw, 40px); letter-spacing: -.035em; line-height: 1; }
 .fl-note { color: var(--mute); font-size: 17px; margin-top: -8px; }

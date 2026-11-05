@@ -54,6 +54,44 @@
     </li>`).join('');
   const tabs = $$('.fl-btn', list);
   const flPack = $('#flPack');
+  // packs live in a floating wrapper so two of them can overlap during a swap
+  const flFloat = document.createElement('div');
+  flFloat.className = 'fl-float';
+  flPack.before(flFloat); flFloat.append(flPack);
+  let swapToken = 0;
+  function swapPack(src, alt, dir, instant) {
+    const token = ++swapToken;
+    const shown = flFloat.lastElementChild;
+    if (instant || reduce) {
+      [...flFloat.children].forEach(n => { if (n !== shown) n.remove(); });
+      shown.getAnimations().forEach(a => a.cancel());
+      shown.src = src; shown.alt = alt;
+      return;
+    }
+    const next = shown.cloneNode();
+    next.removeAttribute('id'); next.src = src; next.alt = alt; next.style.opacity = '0';
+    flFloat.append(next);
+    const ready = next.decode ? next.decode().catch(() => {}) : Promise.resolve();
+    ready.then(() => {
+      if (token !== swapToken) { next.remove(); return; }
+      const D = 820, E = 'cubic-bezier(.65, 0, .35, 1)';
+      const old = [...flFloat.children].filter(n => n !== next);
+      // the new pack fills in from the bottom over the old one: no overlap, no ghosting
+      next.classList.add('fl-filling');
+      next.style.opacity = '';
+      next.animate([
+        { maskPosition: '0 0%', webkitMaskPosition: '0 0%' },
+        { maskPosition: '0 100%', webkitMaskPosition: '0 100%' },
+      ], { duration: D, easing: E }).onfinish = () => {
+        next.classList.remove('fl-filling');
+        if (token === swapToken) old.forEach(n => n.remove());
+      };
+      // a tiny settle so the pack feels touched, not just recoloured
+      flFloat.animate([
+        { transform: 'scale(1)' }, { transform: 'scale(.985)', offset: .45 }, { transform: 'scale(1)' },
+      ], { duration: D, easing: 'ease-in-out' });
+    });
+  }
   const flName = $('#flName'), flNote = $('#flNote'), flSodium = $('#flSodium'), flCaf = $('#flCaf');
   let current = 0;
 
@@ -69,23 +107,12 @@
       list.scrollTo({ left: t.offsetLeft - (list.clientWidth - t.offsetWidth) / 2, behavior: instant ? 'auto' : 'smooth' });
     }
 
-    // pack dips out, changes, and springs back
-    const src = imgOf(f.key);
-    if (reduce || instant) flPack.src = src;
-    else setTimeout(() => { if (current === i) flPack.src = src; }, 330);
-    if (!reduce && !instant) {
-      flPack.animate([
-        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
-        { transform: `translateY(60px) rotate(${-6 * dir}deg)`, opacity: 0, offset: .38 },
-        { transform: `translateY(-30px) rotate(${4 * dir}deg)`, opacity: 0, offset: .42 },
-        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
-      ], { duration: 900, easing: 'cubic-bezier(.23,1,.32,1)' });
-    }
+    // cross-fade to the new pack (see swapPack)
+    swapPack(imgOf(f.key), `VELOR energy gel — ${f.name}`, dir, instant);
 
     flName.textContent = f.name; flNote.textContent = f.note;
     flSodium.textContent = f.sodium; flCaf.textContent = f.caf;
     [flName, flNote, flSodium, flCaf].forEach(el => { el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap'); });
-    flPack.alt = `VELOR energy gel — ${f.name}`;
   }
   tabs.forEach(t => t.addEventListener('click', () => selectFlavour(+t.dataset.i)));
   list.addEventListener('keydown', e => {
