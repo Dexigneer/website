@@ -53,7 +53,7 @@
       </button>
     </li>`).join('');
   const tabs = $$('.fl-btn', list);
-  const flWord = $('#flWord'), flPack = $('#flPack');
+  const flPack = $('#flPack');
   const flName = $('#flName'), flNote = $('#flNote'), flSodium = $('#flSodium'), flCaf = $('#flCaf');
   let current = 0;
 
@@ -67,19 +67,6 @@
     if (list.scrollWidth > list.clientWidth) {
       const t = tabs[i].parentElement;
       list.scrollTo({ left: t.offsetLeft - (list.clientWidth - t.offsetWidth) / 2, behavior: instant ? 'auto' : 'smooth' });
-    }
-
-    // big word rolls through its mask
-    const old = flWord.firstElementChild;
-    const next = document.createElement('span');
-    next.textContent = f.name;
-    if (reduce || instant) { flWord.replaceChildren(next); }
-    else {
-      next.style.position = 'absolute'; next.style.left = '50%'; next.style.top = '0';
-      flWord.appendChild(next);
-      old.animate([{ transform: 'translateY(0)' }, { transform: `translateY(${-100 * dir}%)` }], { duration: 700, easing: 'cubic-bezier(.77,0,.175,1)', fill: 'forwards' });
-      next.animate([{ transform: `translate(-50%, ${100 * dir}%)` }, { transform: 'translate(-50%, 0)' }], { duration: 700, easing: 'cubic-bezier(.77,0,.175,1)', fill: 'forwards' })
-        .onfinish = () => { next.removeAttribute('style'); next.getAnimations().forEach(a => a.cancel()); flWord.replaceChildren(next); };
     }
 
     // pack dips out and springs back
@@ -137,7 +124,6 @@
     e.preventDefault();
     let y = id === '#top' ? 0 : topOf(el);
     if (id === '#shop') y = document.documentElement.scrollHeight - innerHeight;
-    if (id === '#formula') y += innerHeight * .9; // land with the aperture already open
     scrollToY(y);
   }));
 
@@ -154,7 +140,7 @@
   try { items = load(localStorage.getItem(STORE_KEY)); } catch (_) { items = []; }
   const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(items)); } catch (_) {} };
 
-  const cartEl = $('#cart'), scrim = $('#cartScrim'), cartItems = $('#cartItems'), cartDone = $('#cartDone');
+  const cartEl = $('#cart'), scrim = $('#cartScrim'), cartItems = $('#cartItems');
   const cartCount = $('#cartCount'), toast = $('#toast');
   let toastT, lastFocus = null;
 
@@ -178,11 +164,10 @@
     const left = FREE_SHIP - sub;
     $('#cartShipText').textContent = left > 0 ? `${eur(left)} away from free shipping` : 'Free shipping unlocked';
     $('#cartShipBar').style.transform = `scaleX(${clamp(sub / FREE_SHIP)})`;
-    const empty = qty === 0, done = !cartDone.hidden;
-    $('#cartEmpty').hidden = !empty || done;
-    $('#cartFoot').hidden = empty || done;
-    $('#cartShip').hidden = empty || done;
-    cartItems.hidden = done;
+    const empty = qty === 0;
+    $('#cartEmpty').hidden = !empty;
+    $('#cartFoot').hidden = empty;
+    $('#cartShip').hidden = empty;
     const pic = `<img src="${IMG}" alt="" width="438" height="1391">`;
     cartItems.innerHTML = items.map(it => {
       const p = PRODUCTS[it.id];
@@ -207,7 +192,6 @@
   function bump() { cartCount.classList.remove('bump'); void cartCount.offsetWidth; cartCount.classList.add('bump'); }
 
   function addToCart(id, n = 1) {
-    cartDone.hidden = true;
     const it = items.find(x => x.id === id);
     if (it) it.qty = Math.min(MAX_QTY, it.qty + n); else items.push({ id, qty: n });
     save(); renderCart(); bump();
@@ -241,12 +225,10 @@
     cartEl.inert = true; cartEl.setAttribute('aria-hidden', 'true');
     document.documentElement.classList.remove('cart-lock');
     setTimeout(() => { if (!isOpen()) scrim.hidden = true; }, 500);
-    if (!cartDone.hidden) { cartDone.hidden = true; renderCart(); }
     if (restoreFocus) lastFocus?.focus?.({ preventScroll: true });
   }
   $('#cartOpen').addEventListener('click', openCart);
   $('#cartClose').addEventListener('click', () => closeCart());
-  $('#cartDoneClose').addEventListener('click', () => closeCart());
   scrim.addEventListener('click', () => closeCart());
   addEventListener('keydown', e => {
     if (!isOpen()) return;
@@ -257,11 +239,6 @@
       if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
       else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
     }
-  });
-  $('#cartCheckout').addEventListener('click', () => {
-    items = []; save();
-    cartDone.hidden = false; renderCart();
-    $('#cartDoneClose').focus({ preventScroll: true });
   });
   addEventListener('storage', e => { if (e.key === STORE_KEY) { items = load(e.newValue); renderCart(); } });
 
@@ -286,10 +263,9 @@
 
   /* ---------- scroll choreography ---------- */
   const intro = $('#intro'), heroCopy = $('.hero-copy'), blackout = $('#blackout');
-  const formula = $('#formula'), aperture = $('#aperture'), track = $('#track'), bar = $('#formulaBar');
+  const formula = $('#formula'), panel = $('#formulaPanel'), track = $('#track'), bar = $('#formulaBar');
   const counts = $$('.count', track), stats = $$('.stat', track);
   const route = $('#route'), routeLine = $('#routeLine'), routeFill = $('.route-fill'), steps = $$('.step');
-  const curtain = $('.curtain'), footWord = $$('#footWord span');
   const progress = el => { const r = el.getBoundingClientRect(); return clamp(-r.top / (r.height - innerHeight)); };
 
   let vw = innerWidth, vh = innerHeight;
@@ -322,18 +298,17 @@
     const landT = clamp(1 - fr.top / vh);
     flavoursSec.style.setProperty('--r', `${(1 - easeOut(landT)) * Math.min(vw * .06, 72)}px`);
 
-    /* FORMULA: aperture opens, then the track runs horizontally */
+    /* FORMULA: content rises in, then the track runs horizontally */
     const q = progress(formula);
-    const openT = easeIO(clamp(q / .16));
-    const ix = (1 - openT) * 22, iy = (1 - openT) * 18, rr = (1 - openT) * 28;
-    aperture.style.clipPath = `inset(${iy}% ${ix}% ${iy}% ${ix}% round ${rr}px)`;
-    const runT = clamp((q - .18) / .74);
+    const fTop = formula.getBoundingClientRect().top;
+    if (fTop < vh * .45) panel.classList.add('in');
+    const runT = clamp((q - .08) / .84);
     const maxX = Math.max(0, track.scrollWidth - vw + vw * .06);
     track.style.transform = `translate3d(${-runT * maxX}px,0,0)`;
     bar.style.transform = `scaleX(${runT})`;
     stats.forEach((s, i) => {
       const r = s.getBoundingClientRect();
-      if (r.left < vw * .85 && openT > .9) { const c = $('.count', s); if (c) countUp(c); }
+      if (r.left < vw * .85 && fTop < vh * .2) { const c = $('.count', s); if (c) countUp(c); }
     });
 
     /* PROTOCOL: draw the course */
@@ -343,13 +318,6 @@
     routeFill.style.setProperty('--draw', 1 - easeOut(drawT));
     steps.forEach(s => s.classList.toggle('on', drawT >= +s.dataset.at));
 
-    /* FOOTER: wordmark letters rise as the curtain lifts */
-    const cr = curtain.getBoundingClientRect();
-    const footT = clamp((vh - cr.top) / (cr.height * .9));
-    footWord.forEach((l, i) => {
-      const t = easeOut(clamp(footT * 1.4 - i * .08));
-      l.style.setProperty('--y', `${(1 - t) * 100}%`);
-    });
   }
 
   let ticking = false;

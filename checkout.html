@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Checkout — VELOR</title>
+  <meta name="description" content="Checkout — VELOR energy gels for runners.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0a0a'/%3E%3Cpath d='M8 9l8 15 8-15' fill='none' stroke='%23fff' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="co-page">
+  <header class="co-nav">
+    <a class="logo" href="index.html" aria-label="VELOR home"><span>VELOR</span></a>
+    <a class="co-back" href="index.html">← Back to shop</a>
+  </header>
+
+  <main class="co wrap" id="co">
+    <h1 class="co-title">Checkout</h1>
+
+    <!-- empty cart -->
+    <section class="co-empty" id="coEmpty" hidden>
+      <p>Your cart is empty.</p>
+      <a class="btn btn--ink" href="index.html#flavours"><span class="btn-label">Browse flavours</span><span class="btn-price">→</span></a>
+    </section>
+
+    <!-- confirmation -->
+    <section class="co-done" id="coDone" hidden>
+      <p class="co-done-t">Thank you.</p>
+      <p>Order <span class="mono" id="coOrderNo"></span> is confirmed. A receipt is on its way to <span id="coOrderEmail"></span>.</p>
+      <p class="co-note">This is a demo store. Nothing was charged and nothing will ship.</p>
+      <a class="btn btn--ink" href="index.html"><span class="btn-label">Back to the site</span><span class="btn-price">→</span></a>
+    </section>
+
+    <div class="co-grid" id="coGrid">
+      <form class="co-form" id="coForm" novalidate>
+        <fieldset>
+          <legend>Contact</legend>
+          <div class="f f--full">
+            <label for="coEmail">Email</label>
+            <input id="coEmail" name="email" type="email" autocomplete="email" required>
+            <p class="f-err">Enter a valid email.</p>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Delivery</legend>
+          <div class="f">
+            <label for="coFirst">First name</label>
+            <input id="coFirst" name="first" autocomplete="given-name" required>
+            <p class="f-err">Required.</p>
+          </div>
+          <div class="f">
+            <label for="coLast">Last name</label>
+            <input id="coLast" name="last" autocomplete="family-name" required>
+            <p class="f-err">Required.</p>
+          </div>
+          <div class="f f--full">
+            <label for="coAddress">Address</label>
+            <input id="coAddress" name="address" autocomplete="street-address" required>
+            <p class="f-err">Required.</p>
+          </div>
+          <div class="f">
+            <label for="coCity">City</label>
+            <input id="coCity" name="city" autocomplete="address-level2" required>
+            <p class="f-err">Required.</p>
+          </div>
+          <div class="f">
+            <label for="coZip">Postcode</label>
+            <input id="coZip" name="zip" autocomplete="postal-code" inputmode="text" required pattern="[A-Za-z0-9 \-]{3,10}">
+            <p class="f-err">Enter a valid postcode.</p>
+          </div>
+          <div class="f f--full">
+            <label for="coCountry">Country</label>
+            <select id="coCountry" name="country" autocomplete="country-name" required>
+              <option value="SK">Slovakia</option>
+              <option value="CZ">Czechia</option>
+              <option value="AT">Austria</option>
+              <option value="DE">Germany</option>
+              <option value="HU">Hungary</option>
+              <option value="PL">Poland</option>
+            </select>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Shipping</legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="ship" value="standard" checked><span class="opt-body"><span>Standard <small>2–4 working days</small></span><span class="mono" id="coShipStd">€4.90</span></span></label>
+            <label class="opt"><input type="radio" name="ship" value="express"><span class="opt-body"><span>Express <small>Next working day</small></span><span class="mono">€9.90</span></span></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Payment</legend>
+          <div class="f f--full">
+            <label for="coCard">Card number</label>
+            <input id="coCard" name="card" inputmode="numeric" autocomplete="cc-number" placeholder="4242 4242 4242 4242" maxlength="19" required>
+            <p class="f-err">Enter a 16-digit card number.</p>
+          </div>
+          <div class="f">
+            <label for="coExp">Expiry</label>
+            <input id="coExp" name="exp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" maxlength="7" required>
+            <p class="f-err">Use MM / YY.</p>
+          </div>
+          <div class="f">
+            <label for="coCvc">CVC</label>
+            <input id="coCvc" name="cvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4" required>
+            <p class="f-err">3 or 4 digits.</p>
+          </div>
+          <p class="co-note f--full">Demo store. Use any test number, nothing is charged.</p>
+        </fieldset>
+
+        <button class="btn btn--ink co-pay" type="submit" id="coPay"><span class="btn-label">Pay now</span><span class="btn-price" id="coPayPrice">€0.00</span></button>
+      </form>
+
+      <aside class="co-sum" aria-label="Order summary">
+        <h2>Order</h2>
+        <ul class="co-items" id="coItems"></ul>
+        <div class="co-rows">
+          <div class="cart-row"><span>Subtotal</span><span id="coSubtotal">€0.00</span></div>
+          <div class="cart-row cart-row--mute"><span>Shipping</span><span id="coShipping">—</span></div>
+          <div class="cart-row cart-row--total"><span>Total</span><span id="coTotal">€0.00</span></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script src="checkout.js" defer></script>
+</body>
+</html>

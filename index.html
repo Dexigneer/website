@@ -35,7 +35,6 @@
 
   <header class="nav" id="nav">
     <a class="logo" href="#top" aria-label="VELOR home">
-      <svg viewBox="0 0 24 20" aria-hidden="true"><path d="M1.5 1.5 12 18.5 22.5 1.5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="miter"/><path d="M8 1.5 12 8l4-6.5" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/></svg>
       <span>VELOR</span>
     </a>
     <nav class="nav-links" aria-label="Primary">
@@ -63,10 +62,6 @@
 
         <div class="blackout" id="blackout" aria-hidden="false">
           <p class="manifesto" id="manifesto">No sugar crash. No sticky hands. No guessing. Just thirty grams of fuel, ready the moment your legs ask for it.</p>
-          <div class="blackout-foot">
-            <span>Made for the long run</span>
-            <span class="scroll-cue">Scroll</span>
-          </div>
         </div>
       </div>
     </section>
@@ -82,7 +77,6 @@
           <ol class="fl-list" id="flList" role="tablist" aria-label="Flavours"></ol>
 
           <div class="fl-stage" aria-live="polite">
-            <div class="fl-word" id="flWord" aria-hidden="true"><span>Blood Orange</span></div>
             <img class="fl-pack" id="flPack" src="assets/velor-gel.webp" width="438" height="1391" alt="VELOR energy gel pack">
           </div>
 
@@ -103,12 +97,12 @@
       </div>
     </section>
 
-    <!-- ================= FORMULA (aperture + horizontal track) ================= -->
+    <!-- ================= FORMULA (pinned horizontal track) ================= -->
     <section class="formula" id="formula" aria-labelledby="formula-title">
       <div class="formula-stage">
-        <div class="aperture" id="aperture">
+        <div class="formula-panel" id="formulaPanel">
           <div class="formula-head">
-            <h2 id="formula-title">Four numbers.<br>Nothing else.</h2>
+            <h2 id="formula-title" data-split>Four numbers. Nothing else.</h2>
           </div>
           <div class="track" id="track">
             <article class="stat">
@@ -174,13 +168,13 @@
     </section>
   </main>
 
-  <!-- ================= FOOTER / SHOP (curtain reveal) ================= -->
-  <div class="curtain" id="shop">
-    <footer class="foot" id="foot">
-      <div class="foot-top wrap">
+  <!-- ================= FOOTER ================= -->
+  <footer class="foot" id="shop">
+    <div class="wrap">
+      <div class="foot-top">
         <div class="foot-offer">
           <h2>All six flavours.<br>Twelve gels.</h2>
-          <button class="btn btn--paper" type="button" id="boxAdd"><span class="btn-label">Order the box</span><span class="btn-price">€36</span></button>
+          <button class="btn btn--paper" type="button" id="boxAdd"><span class="btn-label">Order the starter box</span><span class="btn-price">€36</span></button>
         </div>
         <form class="foot-news" id="news" novalidate>
           <label for="email">Race-day notes, once a month.</label>
@@ -191,13 +185,36 @@
           <p class="field-msg" id="newsMsg" role="status"></p>
         </form>
       </div>
-      <div class="foot-word" id="footWord" aria-hidden="true"><span>V</span><span>E</span><span>L</span><span>O</span><span>R</span></div>
-      <div class="foot-base wrap">
-        <span>© 2026 VELOR Sports Nutrition</span>
-        <nav aria-label="Footer"><a href="#flavours">Flavours</a><a href="#formula">Formula</a><a href="#protocol">Protocol</a><a href="mailto:hello@velor.example">Contact</a></nav>
+
+      <div class="foot-mid">
+        <a class="foot-logo" href="#top" aria-label="Back to top">VELOR</a>
+        <nav class="foot-cols" aria-label="Footer">
+          <div>
+            <p>Shop</p>
+            <a href="#flavours">Flavours</a>
+            <a href="#shop">Starter box</a>
+            <a href="checkout.html">Checkout</a>
+          </div>
+          <div>
+            <p>Learn</p>
+            <a href="#formula">Formula</a>
+            <a href="#protocol">Protocol</a>
+          </div>
+          <div>
+            <p>Contact</p>
+            <a href="mailto:hello@velor.example">hello@velor.example</a>
+            <a href="#" aria-disabled="true">Instagram</a>
+            <a href="#" aria-disabled="true">Strava club</a>
+          </div>
+        </nav>
       </div>
-    </footer>
-  </div>
+
+      <div class="foot-base">
+        <span>© 2026 VELOR Sports Nutrition</span>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </div>
+  </footer>
 
   <div class="cart-scrim" id="cartScrim" hidden></div>
   <aside class="cart" id="cart" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true" inert>
@@ -211,16 +228,11 @@
       <p>Your cart is empty.</p>
       <a class="btn btn--ink" href="#flavours" data-close-cart><span class="btn-label">Browse flavours</span><span class="btn-price">→</span></a>
     </div>
-    <div class="cart-done" id="cartDone" hidden>
-      <p class="cart-done-t">Thank you.</p>
-      <p>Your order is confirmed. This is a demo store, so nothing was charged.</p>
-      <button class="btn btn--ink" type="button" id="cartDoneClose"><span class="btn-label">Back to the site</span><span class="btn-price">→</span></button>
-    </div>
     <footer class="cart-foot" id="cartFoot">
       <div class="cart-row"><span>Subtotal</span><span id="cartSubtotal">€0.00</span></div>
       <div class="cart-row cart-row--mute"><span>Shipping</span><span id="cartShipping">—</span></div>
       <div class="cart-row cart-row--total"><span>Total</span><span id="cartTotal">€0.00</span></div>
-      <button class="btn btn--ink cart-checkout" type="button" id="cartCheckout"><span class="btn-label">Checkout</span><span class="btn-price" id="cartCheckoutPrice">€0.00</span></button>
+      <a class="btn btn--ink cart-checkout" href="checkout.html" id="cartCheckout"><span class="btn-label">Checkout</span><span class="btn-price" id="cartCheckoutPrice">€0.00</span></a>
     </footer>
   </aside>
 
