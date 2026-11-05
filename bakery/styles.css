@@ -1,5 +1,5 @@
 /* ==========================================================================
-   KVAS — remeselná pekáreň
+   KVAS — artisan sourdough bakery
    Black, white and the colour of the bread. Nothing else.
    ========================================================================== */
 
@@ -106,9 +106,8 @@ em { font-style: italic; }
 .nav.is-scrolled { background: rgba(247, 246, 243, .82); -webkit-backdrop-filter: saturate(1.4) blur(14px); backdrop-filter: saturate(1.4) blur(14px); }
 .nav.is-dark { color: var(--on-dark); background: rgba(14, 14, 13, .55); }
 .nav.is-hidden { transform: translateY(-100%); }
-.logo { display: inline-flex; align-items: center; gap: 10px; font: 500 20px/1 var(--serif); letter-spacing: .14em; justify-self: start; }
-.logo-mark { width: 26px; height: 26px; transition: transform .8s var(--ease-out); }
-.logo:hover .logo-mark { transform: rotate(-90deg); }
+.logo { justify-self: start; font: 400 22px/1 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: .22em; margin-right: -.22em; transition: letter-spacing .6s var(--ease-out), opacity .2s ease; }
+.logo:hover { letter-spacing: .3em; }
 .nav-links { display: flex; gap: 34px; font-size: 14px; }
 .nav-links a { position: relative; padding: 6px 0; }
 .nav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease-out); }
@@ -145,7 +144,7 @@ em { font-style: italic; }
 .hero-copy { position: relative; z-index: 2; padding-top: calc(var(--nav-h) + clamp(20px, 5vh, 56px)); text-align: center; }
 .hero-label { margin-bottom: clamp(14px, 2.4vh, 26px); }
 .hero-title {
-  font: 300 clamp(76px, 15.2vw, 236px)/.84 var(--serif);
+  font: 300 clamp(84px, 17.5vw, 272px)/.84 var(--serif);
   font-variation-settings: "opsz" 144;
   letter-spacing: -.055em;
   display: flex; justify-content: center; gap: .2em;
@@ -182,11 +181,11 @@ em { font-style: italic; }
 .facts b { font: 400 clamp(28px, 3vw, 44px)/1 var(--mono); letter-spacing: -.04em; }
 .facts span { font-size: 14px; color: var(--mute); }
 
-/* ---------- 3 · proces (dark, pinned) ---------- */
+/* ---------- 3 · process (dark, pinned) ---------- */
 .proces { position: relative; color: var(--on-dark); }
 .proces-pin { position: relative; height: 100svh; min-height: 640px; display: flex; align-items: center; background: var(--dark); overflow: hidden; }
 .proces-grid { display: grid; grid-template-columns: 1fr minmax(0, 1.25fr) 1fr; align-items: center; gap: clamp(20px, 3vw, 48px); height: 100%; padding-top: var(--nav-h); padding-bottom: 32px; }
-.proces-head .h2 { margin-top: 18px; }
+.proces-head .h2 { margin-top: 18px; font-size: clamp(44px, 5.2vw, 88px); white-space: nowrap; }
 .proces-stage { position: relative; width: 100%; max-width: 620px; aspect-ratio: 1; justify-self: center; }
 .proces-ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
 .proces-ring circle { fill: none; stroke-width: .5; }
@@ -207,7 +206,7 @@ em { font-style: italic; }
 .steps h3 { font: 400 22px/1.2 var(--serif); letter-spacing: -.01em; }
 .steps p { margin-top: 4px; font-size: 14px; color: var(--on-dark-mute); }
 
-/* ---------- 4 · pult ---------- */
+/* ---------- 4 · counter ---------- */
 .pult { position: relative; z-index: 2; background: var(--paper); padding: clamp(80px, 12vh, 140px) 0 clamp(80px, 12vh, 140px); }
 .crust { position: absolute; left: 0; right: 0; top: 1px; height: clamp(60px, 13vw, 220px); transform: translateY(-100%); background: var(--paper); border-radius: 50% 50% 0 0 / 100% 100% 0 0; transform-origin: bottom; pointer-events: none; }
 .no-js .crust, .reduced .crust { display: none; }
@@ -240,7 +239,7 @@ em { font-style: italic; }
 .card-price { font: 400 17px/1.5 var(--mono); letter-spacing: -.02em; text-align: right; }
 .card-meta { grid-column: 1 / -1; font-size: 14px; color: var(--mute); }
 
-/* ---------- 5 · z pece ---------- */
+/* ---------- 5 · bake times ---------- */
 .pec { position: relative; padding: clamp(80px, 12vh, 140px) 0; border-top: 1px solid var(--line); }
 .bakes { border-top: 1px solid var(--ink); }
 .bake { position: relative; display: grid; grid-template-columns: minmax(150px, 1.1fr) 2fr 190px; align-items: center; gap: 24px; padding: clamp(18px, 2.6vh, 28px) 0; border-bottom: 1px solid var(--line); cursor: default; }
@@ -266,7 +265,7 @@ em { font-style: italic; }
 .peek img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 18px 30px rgba(0, 0, 0, .3)); }
 .peek.is-on { opacity: 1; }
 
-/* ---------- 6 · návšteva ---------- */
+/* ---------- 6 · visit ---------- */
 .navsteva { position: relative; z-index: 2; background: var(--paper); padding: clamp(80px, 12vh, 140px) 0 clamp(90px, 14vh, 160px); border-top: 1px solid var(--line); box-shadow: 0 40px 60px -20px rgba(0, 0, 0, .25); }
 .street { margin-top: 18px; font: 300 clamp(96px, 23vw, 380px)/.8 var(--serif); font-variation-settings: "opsz" 144; letter-spacing: -.065em; margin-left: -.05em; overflow: hidden; padding-bottom: .08em; }
 .street span { display: inline-block; }
@@ -277,7 +276,7 @@ em { font-style: italic; }
 .hours dt { color: var(--ink-2); }
 .hours dd { font-family: var(--mono); font-size: 14px; text-align: right; }
 .hours .is-today dt { font-weight: 600; color: var(--ink); }
-.hours .is-today dt::after { content: "dnes"; margin-left: 10px; padding: 3px 7px; border-radius: 999px; background: var(--ink); color: var(--paper); font: 500 10px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; vertical-align: 2px; }
+.hours .is-today dt::after { content: "today"; margin-left: 10px; padding: 3px 7px; border-radius: 999px; background: var(--ink); color: var(--paper); font: 500 10px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; vertical-align: 2px; }
 .course { padding: 22px; border-radius: 4px; background: var(--tile); display: flex; flex-direction: column; gap: 10px; align-self: start; transition: transform .3s var(--ease-out); }
 .course:hover { transform: translateY(-2px); }
 .course-title { font: 400 24px/1.15 var(--serif); letter-spacing: -.015em; }
@@ -426,7 +425,7 @@ em { font-style: italic; }
 }
 
 @media (max-height: 720px) and (min-width: 861px) {
-  .hero-title { font-size: clamp(76px, 22vh, 236px); }
+  .hero-title { font-size: clamp(84px, 25vh, 272px); }
 }
 
 @media (prefers-reduced-motion: reduce) {

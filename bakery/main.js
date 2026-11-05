@@ -13,7 +13,7 @@
   const animate = hasGsap && !reduced;
   if (reduced) root.classList.add('reduced');
 
-  const eur = new Intl.NumberFormat('sk-SK', { style: 'currency', currency: 'EUR' });
+  const eur = new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' });
 
   /* ------------------------------------------------------------------
      Time in Bratislava — drives the open status, today's hours and the
@@ -34,8 +34,8 @@
       const d = (t.day + i) % 7, o = HOURS[d];
       if (!o) continue;
       if (i === 0 && t.min >= o[0]) continue;
-      const names = ['v nedeľu', 'v pondelok', 'v utorok', 'v stredu', 'vo štvrtok', 'v piatok', 'v sobotu'];
-      return `${i === 0 ? 'dnes' : i === 1 ? 'zajtra' : names[d]} o ${hm(o[0])}`;
+      const names = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      return `${i === 0 ? 'today' : i === 1 ? 'tomorrow' : names[d]} at ${hm(o[0])}`;
     }
     return '';
   }
@@ -46,7 +46,7 @@
     const open = !!o && t.min >= o[0] && t.min < o[1];
     $$('[data-status]').forEach(el => {
       el.classList.toggle('is-closed', !open);
-      $('span', el).textContent = open ? `Otvorené do ${hm(o[1])}` : `Otvárame ${nextOpening(t)}`;
+      $('span', el).textContent = open ? `Open until ${hm(o[1])}` : `Opens ${nextOpening(t)}`;
     });
     $$('[data-hours-table] > div').forEach(row => {
       row.classList.toggle('is-today', row.dataset.days.split(',').map(Number).includes(t.day));
@@ -66,19 +66,18 @@
       const state = $('.bake-state', row);
       row.classList.remove('is-fresh', 'is-next', 'is-done');
       if (!open || !days.includes(t.day)) {
-        state.textContent = !open ? 'Zajtra' : 'Len Po – Pi';
-        if (!open) state.textContent = nextOpening(t).startsWith('zajtra') ? 'Zajtra' : 'Po otvorení';
+        state.textContent = !open ? (nextOpening(t).startsWith('tomorrow') ? 'Tomorrow' : 'Next opening') : 'Weekdays only';
         return;
       }
-      if (t.min >= at && t.min < at + 45) { row.classList.add('is-fresh'); state.textContent = 'Práve z pece'; return; }
-      if (t.min >= at + 45) { row.classList.add('is-done'); state.textContent = 'Na pulte'; return; }
+      if (t.min >= at && t.min < at + 45) { row.classList.add('is-fresh'); state.textContent = 'Fresh out'; return; }
+      if (t.min >= at + 45) { row.classList.add('is-done'); state.textContent = 'On the counter'; return; }
       if (!nextFound) {
         nextFound = true; row.classList.add('is-next');
         const d = at - t.min, h = Math.floor(d / 60), m = d % 60;
-        state.textContent = `o ${h ? h + ' h ' : ''}${m} min`;
+        state.textContent = `in ${h ? h + ' h ' : ''}${m} min`;
         return;
       }
-      state.textContent = 'Neskôr';
+      state.textContent = 'Later today';
     });
   }
   renderStatus();
@@ -165,9 +164,9 @@
     id: c.dataset.product, name: c.dataset.name, price: parseFloat(c.dataset.price), img: c.dataset.img,
   }]));
   let bag = {};
-  try { bag = JSON.parse(localStorage.getItem('kvas-bag') || '{}') || {}; } catch (_) { bag = {}; }
+  try { bag = JSON.parse(localStorage.getItem('kvas-bag-en') || '{}') || {}; } catch (_) { bag = {}; }
   Object.keys(bag).forEach(k => { if (!products[k] || !(bag[k] > 0)) delete bag[k]; });
-  const save = () => { try { localStorage.setItem('kvas-bag', JSON.stringify(bag)); } catch (_) {} };
+  const save = () => { try { localStorage.setItem('kvas-bag-en', JSON.stringify(bag)); } catch (_) {} };
   const count = () => Object.values(bag).reduce((a, b) => a + b, 0);
   const total = () => Object.entries(bag).reduce((a, [k, q]) => a + products[k].price * q, 0);
 
@@ -183,7 +182,7 @@
     $$('[data-bag-total]').forEach(el => { el.textContent = eur.format(total()); });
     const barLabel = $('[data-bar-label]'), barTotal = $('.actionbar [data-bar-total]');
     if (barLabel) {
-      barLabel.textContent = n ? `Taška · ${n} ks` : 'Objednať na zajtra';
+      barLabel.textContent = n ? `Your bag · ${n} ${n === 1 ? 'item' : 'items'}` : 'Order for tomorrow';
       barTotal.textContent = n ? eur.format(total()) : '→';
     }
     bagEl.classList.toggle('is-empty', n === 0);
@@ -194,8 +193,8 @@
       const li = document.createElement('li');
       li.innerHTML = `<img src="${p.img}" alt="" width="64" height="64">
         <div><p class="bag-item-name">${p.name}</p><p class="bag-item-price">${eur.format(p.price * q)}</p></div>
-        <div class="qty" role="group" aria-label="Množstvo — ${p.name}">
-          <button type="button" data-dec="${k}" aria-label="Uberať">−</button><span>${q}</span><button type="button" data-inc="${k}" aria-label="Pridať">+</button>
+        <div class="qty" role="group" aria-label="Quantity — ${p.name}">
+          <button type="button" data-dec="${k}" aria-label="Remove one">−</button><span>${q}</span><button type="button" data-inc="${k}" aria-label="Add one">+</button>
         </div>`;
       list.appendChild(li);
     });
@@ -226,6 +225,7 @@
   }
 
   function add(id, fromBtn) {
+    nav.classList.remove('is-hidden');
     bag[id] = (bag[id] || 0) + 1;
     save(); renderBag(true);
     if (fromBtn) {
@@ -233,7 +233,7 @@
       setTimeout(() => fromBtn.classList.remove('added'), 500);
       flyToBag($('img', fromBtn.closest('.card-media')));
     }
-    toast(`Pridané do tašky · ${products[id].name}`);
+    toast(`Added to your bag · ${products[id].name}`);
   }
 
   document.addEventListener('click', e => {
@@ -245,7 +245,7 @@
     if (dec) { const k = dec.dataset.dec; bag[k]--; if (bag[k] <= 0) delete bag[k]; save(); renderBag(); return; }
     const opener = e.target.closest('[data-open-bag]');
     if (opener) {
-      if (opener.closest('[data-actionbar]') && count() === 0) { scrollToEl($('#pult')); return; }
+      if (opener.closest('[data-actionbar]') && count() === 0) { scrollToEl($('#counter')); return; }
       openBag(); return;
     }
     const closer = e.target.closest('[data-close-bag]');
@@ -291,10 +291,10 @@
     form.name.setAttribute('aria-invalid', String(!name));
     const okMail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
     form.email.setAttribute('aria-invalid', String(!okMail));
-    if (!name || !okMail) { err.textContent = !name ? 'Doplňte, prosím, meno.' : 'Skontrolujte, prosím, e-mail.'; return; }
+    if (!name || !okMail) { err.textContent = !name ? 'Please add your name.' : 'Please check your email address.'; return; }
     err.textContent = '';
     $('[data-done-name]').textContent = name.split(' ')[0];
-    $('[data-done-slot]').textContent = form.slot.value.toLowerCase();
+    $('[data-done-slot]').textContent = form.slot.value.replace(/^Tomorrow,/, 'tomorrow,');
     bag = {}; save(); renderBag();
     form.reset();
     $('[data-bag-body]').hidden = true;
