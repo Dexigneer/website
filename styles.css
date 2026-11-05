@@ -63,32 +63,44 @@ html.cart-lock, html.cart-lock body { overflow: hidden; }
 [data-split].in .w > span { transform: none; }
 
 /* ==========================================================================
-   NAV — difference blend so it inverts itself over black sections
+   NAV — solid frosted bar; switches to a dark bar over black sections
    ========================================================================== */
+:root { --nav-h: 68px; }
 .nav {
   position: fixed; inset: 0 0 auto 0; z-index: 50;
+  height: var(--nav-h);
   display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
-  padding: 22px var(--gutter);
-  color: #fff;
-  mix-blend-mode: difference;
-  pointer-events: none;
+  padding: 0 var(--gutter);
+  color: var(--ink);
+  background: rgba(255, 255, 255, .94);
+  -webkit-backdrop-filter: saturate(180%) blur(16px); backdrop-filter: saturate(180%) blur(16px);
+  border-bottom: 1px solid var(--line);
+  transition: background-color .35s ease, color .35s ease, border-color .35s ease;
 }
-.nav > * { pointer-events: auto; }
-.logo { display: inline-flex; align-items: center; gap: 10px; justify-self: start; }
+.nav.nav--dark {
+  color: var(--paper);
+  background: rgba(10, 10, 10, .9);
+  border-bottom-color: var(--line-inv);
+}
+.logo { display: inline-flex; align-items: center; justify-self: start; min-height: 44px; }
 .logo span { font-weight: 600; font-size: 18px; letter-spacing: .34em; margin-right: -.34em; }
-.nav-links { display: flex; gap: 36px; font-size: 14px; }
-.nav-links a { position: relative; }
-.nav-links a::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: -3px; height: 1px; background: currentColor;
-  transform: scaleX(0); transform-origin: right; transition: transform .45s var(--ease-out);
+.nav-links { display: flex; gap: 6px; font-size: 14px; }
+.nav-links a {
+  padding: 8px 14px; border-radius: 999px; opacity: .72;
+  transition: opacity .2s, background-color .2s;
 }
-.nav-links a:hover::after { transform: scaleX(1); transform-origin: left; }
-.nav-actions { justify-self: end; display: flex; align-items: center; gap: 22px; font-size: 14px; }
+.nav-links a:hover { opacity: 1; background: rgba(10, 10, 10, .05); }
+.nav--dark .nav-links a:hover { background: rgba(255, 255, 255, .08); }
+.nav-actions { justify-self: end; display: flex; align-items: center; gap: 8px; font-size: 14px; }
 .nav-shop {
-  padding: 8px 16px; border-radius: 999px; background: #fff; color: #000; font-weight: 500;
-  transition: transform .16s var(--ease-out);
+  padding: 9px 18px; border-radius: 999px; background: var(--ink); color: var(--paper); font-weight: 500;
+  transition: transform .16s var(--ease-out), background-color .35s, color .35s;
 }
+.nav--dark .nav-shop { background: var(--paper); color: var(--ink); }
 .nav-shop:active { transform: scale(.96); }
+.nav-cart { padding: 0 6px 0 12px; border-radius: 999px; transition: background-color .2s; }
+.nav-cart:hover { background: rgba(10, 10, 10, .05); }
+.nav--dark .nav-cart:hover { background: rgba(255, 255, 255, .08); }
 .nav-cart { display: inline-flex; align-items: center; gap: 8px; }
 .cart-count {
   display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px;
@@ -143,13 +155,6 @@ html.cart-lock, html.cart-lock body { overflow: hidden; }
 .loaded .pack-body { transform: translate3d(0, calc(var(--hide, 50%) - var(--lift, 0%) + var(--sink, 0px)), 0); }
 .loaded .pack.ready .pack-body { transition: transform .7s var(--ease-out); transition-delay: 0s; }
 .loaded .pack.ready.sunk .pack-body { transition: none; }
-.pack-label {
-  position: absolute; left: 50%; bottom: calc(100% + 18px);
-  transform: translate(-50%, 8px); white-space: nowrap;
-  font-family: var(--mono); font-size: 11px; letter-spacing: .05em; text-transform: uppercase;
-  opacity: 0; transition: opacity .3s, transform .5s var(--ease-out); pointer-events: none;
-}
-
 /* Fixed hit area = the resting visible part of the pack. The artwork moves,
    the hit area doesn't, so the lift can't slide out from under the cursor. */
 .pack::before {
@@ -163,13 +168,11 @@ html.cart-lock, html.cart-lock body { overflow: hidden; }
   border-radius: 50%; background: var(--paper); z-index: 2;
 }
 
+/* only the pack under the cursor moves */
 @media (hover: hover) and (pointer: fine) {
-  .pack:hover { --lift: 26%; }
-  .pack:hover .pack-label { opacity: 1; transform: translate(-50%, 0); }
-  .packs:hover .pack:not(:hover) { --lift: -3%; }
+  .pack:hover { --lift: 16%; }
 }
-.pack:focus-visible { --lift: 26%; }
-.pack:focus-visible .pack-label { opacity: 1; transform: translate(-50%, 0); }
+.pack:focus-visible { --lift: 16%; }
 
 /* the black disc */
 .blackout {
@@ -351,11 +354,11 @@ html.cart-lock, html.cart-lock body { overflow: hidden; }
 .step p { color: var(--mute); max-width: 32ch; }
 
 /* ==========================================================================
-   FOOTER — revealed underneath the page as it scrolls away
+   FOOTER
    ========================================================================== */
 main { position: relative; z-index: 2; background: var(--paper); }
 .foot {
-  position: sticky; bottom: 0; z-index: 1;
+  position: relative;
   background: var(--ink); color: var(--paper);
   padding: clamp(80px, 12vh, 128px) 0 0;
 }
@@ -498,14 +501,13 @@ main { position: relative; z-index: 2; background: var(--paper); }
   .foot-cols { grid-template-columns: 1fr 1fr; gap: 28px 24px; }
   .foot-cols div:last-child { grid-column: 1 / -1; }
   .foot-offer h2 { font-size: 40px; }
-  .nav { padding: 16px var(--gutter); grid-template-columns: 1fr auto; }
+  :root { --nav-h: 60px; }
+  .nav { grid-template-columns: 1fr auto; }
   .nav-links { display: none; }
   .nav-actions { gap: 14px; }
   .hero-copy { top: 36%; }
   .packs { padding: 0 8px; }
   .pack { --w: clamp(44px, 21vw, 150px); --hide: 30%; --show: .7; }
-  .packs:hover .pack:not(:hover) { --lift: 0%; }
-  .pack-label { display: none; }
 
   .intro { height: 300vh; }
   .fl { grid-template-columns: 1fr; }
@@ -543,7 +545,7 @@ main { position: relative; z-index: 2; background: var(--paper); }
 
 /* short landscape screens (phones turned sideways) */
 @media (max-height: 560px) and (orientation: landscape) {
-  .nav { padding-top: 12px; padding-bottom: 12px; }
+  :root { --nav-h: 54px; }
   .hero-copy { top: 40%; }
   .hero-title { font-size: clamp(34px, 8vh + 2vw, 64px); max-width: 16ch; }
   .pack { --w: clamp(40px, 7.5vw, 90px); --hide: 46%; --show: .54; }

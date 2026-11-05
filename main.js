@@ -38,7 +38,6 @@
   packsEl.innerHTML = FLAVOURS.map((f, i) => `
     <button class="pack" type="button" style="--i:${i}" data-i="${i}" aria-label="${f.name} — see flavour">
       <span class="pack-body">
-        <span class="pack-label">${f.name}</span>
         <img class="pack-img" src="${IMG}" width="438" height="1391" alt="" draggable="false">
       </span>
     </button>`).join('');
@@ -266,6 +265,7 @@
   const formula = $('#formula'), panel = $('#formulaPanel'), track = $('#track'), bar = $('#formulaBar');
   const counts = $$('.count', track), stats = $$('.stat', track);
   const route = $('#route'), routeLine = $('#routeLine'), routeFill = $('.route-fill'), steps = $$('.step');
+  const navEl = $('#nav'), footEl = $('#shop');
   const progress = el => { const r = el.getBoundingClientRect(); return clamp(-r.top / (r.height - innerHeight)); };
 
   let vw = innerWidth, vh = innerHeight;
@@ -288,6 +288,12 @@
     const R = Math.hypot(vw / 2, vh) * 1.02;
     blackout.style.clipPath = `circle(${(discT * R).toFixed(1)}px at 50% 100%)`;
     blackout.classList.toggle('full', discT > .99);
+
+    /* NAV: dark bar while it sits over a black section */
+    const navY = navEl.offsetHeight / 2;
+    const over = el => { const r = el.getBoundingClientRect(); return r.top <= navY && r.bottom >= navY; };
+    const onDisc = over(intro) && discT * R >= Math.hypot(vw / 2, vh - navY);
+    navEl.classList.toggle('nav--dark', onDisc || over(formula) || over(footEl));
 
     const wordsT = clamp((p - .4) / .48);
     const lit = Math.round(wordsT * mWords.length);
