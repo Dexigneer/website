@@ -266,6 +266,7 @@
   const counts = $$('.count', track), stats = $$('.stat', track);
   const route = $('#route'), routeLine = $('#routeLine'), routeFill = $('.route-fill'), steps = $$('.step');
   const navEl = $('#nav'), footEl = $('#shop');
+  const mqMobile = matchMedia('(max-width: 760px)');
   const progress = el => { const r = el.getBoundingClientRect(); return clamp(-r.top / (r.height - innerHeight)); };
 
   let vw = innerWidth, vh = innerHeight;
@@ -282,7 +283,7 @@
     });
     const copyT = clamp(p / .2);
     heroCopy.style.opacity = 1 - easeOut(copyT);
-    heroCopy.style.transform = `translateY(calc(-50% - ${copyT * 60}px)) scale(${1 - copyT * .06})`;
+    heroCopy.style.transform = `translateY(calc(${mqMobile.matches ? '0%' : '-50%'} - ${copyT * 60}px)) scale(${1 - copyT * .06})`;
 
     const discT = easeIO(clamp((p - .05) / .32));
     const R = Math.hypot(vw / 2, vh) * 1.02;
@@ -308,13 +309,14 @@
     const q = progress(formula);
     const fTop = formula.getBoundingClientRect().top;
     if (fTop < vh * .45) panel.classList.add('in');
-    const runT = clamp((q - .08) / .84);
+    const stacked = mqMobile.matches;
+    const runT = stacked ? 0 : clamp((q - .08) / .84);
     const maxX = Math.max(0, track.scrollWidth - vw + vw * .06);
     track.style.transform = `translate3d(${-runT * maxX}px,0,0)`;
     bar.style.transform = `scaleX(${runT})`;
     stats.forEach((s, i) => {
       const r = s.getBoundingClientRect();
-      if (r.left < vw * .85 && fTop < vh * .2) { const c = $('.count', s); if (c) countUp(c); }
+      if (stacked ? r.top < vh * .9 && panel.classList.contains('in') : r.left < vw * .85 && fTop < vh * .2) { const c = $('.count', s); if (c) countUp(c); }
     });
 
     /* PROTOCOL: draw the course */

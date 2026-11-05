@@ -129,6 +129,8 @@ html.cart-lock, html.cart-lock body { overflow: hidden; }
   letter-spacing: -.045em;
   max-width: 11ch; margin: 0 auto;
 }
+.hero-cta { display: none; }
+
 /* six packs, half-submerged at the bottom edge */
 .packs {
   position: absolute; left: 0; right: 0; bottom: 0; margin: 0 auto; max-width: var(--max); padding: 0 var(--gutter);
@@ -152,7 +154,8 @@ html.cart-lock, html.cart-lock body { overflow: hidden; }
   filter: drop-shadow(0 24px 30px rgba(0, 0, 0, .1));
   user-select: none; -webkit-user-drag: none; pointer-events: none;
 }
-.loaded .pack-body { transform: translate3d(0, calc(var(--hide, 50%) - var(--lift, 0%) + var(--sink, 0px)), 0); }
+.loaded .pack-body { transform: translate3d(0, calc(var(--hide, 50%) - var(--lift, 0%) + var(--sink, 0px)), 0) rotate(var(--rot, 0deg)); }
+.pack-body { transform-origin: 50% 80%; }
 .loaded .pack.ready .pack-body { transition: transform .7s var(--ease-out); transition-delay: 0s; }
 .loaded .pack.ready.sunk .pack-body { transition: none; }
 /* Fixed hit area = the resting visible part of the pack. The artwork moves,
@@ -505,21 +508,54 @@ main { position: relative; z-index: 2; background: var(--paper); }
   .nav { grid-template-columns: 1fr auto; }
   .nav-links { display: none; }
   .nav-actions { gap: 14px; }
-  .hero-copy { top: 36%; }
-  .packs { padding: 0 8px; }
-  .pack { --w: clamp(44px, 21vw, 150px); --hide: 30%; --show: .7; }
+  /* hero: bigger type, a CTA, and the six packs fanned out like a hand of cards */
+  .hero-copy { top: calc(var(--nav-h) + 9vh); transform: none; }
+  .hero-title { font-size: clamp(44px, 13.6vw, 68px); line-height: .92; max-width: 8.5ch; }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 10px; margin-top: 26px;
+    height: 48px; padding: 0 22px; border-radius: 999px;
+    background: var(--ink); color: var(--paper); font-size: 15px; font-weight: 500;
+    opacity: 0; transform: translateY(10px);
+    transition: opacity .8s .55s var(--ease-out), transform .8s .55s var(--ease-out);
+  }
+  .hero-cta:active { transform: scale(.97); }
+  .loaded .hero-cta { opacity: 1; transform: none; }
+  .packs { display: block; padding: 0; max-width: none; }
+  .pack {
+    --w: min(27vw, 180px);
+    position: absolute; left: calc(50% + var(--x, 0px) - var(--w) / 2);
+  }
+  .pack:nth-child(1) { --x: -35vw; --rot: -15deg; --hide: 47%; --show: .53; z-index: 1; }
+  .pack:nth-child(2) { --x: -21vw; --rot: -9deg;  --hide: 38%; --show: .62; z-index: 2; }
+  .pack:nth-child(3) { --x: -7vw;  --rot: -3deg;  --hide: 31%; --show: .69; z-index: 3; }
+  .pack:nth-child(4) { --x: 7vw;   --rot: 3deg;   --hide: 31%; --show: .69; z-index: 3; }
+  .pack:nth-child(5) { --x: 21vw;  --rot: 9deg;   --hide: 38%; --show: .62; z-index: 2; }
+  .pack:nth-child(6) { --x: 35vw;  --rot: 15deg;  --hide: 47%; --show: .53; z-index: 1; }
+  .pack-img { filter: drop-shadow(0 18px 24px rgba(0, 0, 0, .16)); }
 
   .intro { height: 300vh; }
   .fl { grid-template-columns: 1fr; }
-  .fl-stage { height: 46vh; min-height: 320px; }
-  .fl { gap: 28px; }
+  .flavours { padding-top: calc(var(--nav-h) + 36px); }
+  .fl-stage { height: 42vh; min-height: 280px; max-height: 420px; }
+  .fl { gap: 24px; }
+  .fl-specs div { padding: 11px 0; }
   .btn--ink, .btn--paper { min-width: 0; width: 100%; }
 
-  .formula { height: 460vh; }
-  .formula-head { top: 84px; }
-  .track { padding-left: var(--gutter); bottom: 64px; }
-  .stat { width: 82vw; }
-  .stat-n { font-size: 30vw; }
+  /* formula: no pinning on phones; a calm 2x2 grid of numbers */
+  .formula { height: auto; }
+  .formula-stage { position: relative; height: auto; overflow: visible; }
+  .formula-panel { position: relative; padding: calc(var(--nav-h) + 48px) var(--gutter) 72px; }
+  .formula-head { position: static; }
+  .formula-head h2 { max-width: 9ch; }
+  .track {
+    position: static; transform: none !important; padding: 0; margin-top: 44px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px 16px;
+  }
+  .stat { width: auto; padding: 16px 0 0; border-left: 0; border-top: 1px solid var(--line-inv); gap: 8px; }
+  .stat-n { font-size: clamp(56px, 17vw, 96px); margin: 10px 0 8px -.04em; }
+  .stat h3 { font-size: 16px; }
+  .stat p:last-child { font-size: 14px; }
+  .formula-bar { display: none; }
 
   .steps { grid-template-columns: 1fr; gap: 36px; }
   .foot-top { flex-direction: column; align-items: stretch; }
