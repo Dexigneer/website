@@ -1,244 +1,27 @@
 <!doctype html>
-<html lang="en">
+<html lang="sk">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>VELOR — Energy Gel for Runners</title>
-  <meta name="description" content="VELOR energy gels for runners. 30 g of carbohydrate in 60 ml, 2:1 glucose–fructose, six flavours. Fuel the final kilometre.">
-  <meta name="theme-color" content="#ffffff">
-  <link rel="canonical" href="https://velor.example/">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="VELOR — Energy Gel for Runners">
-  <meta property="og:description" content="30 g carbs. 60 ml. Six flavours. Fuel the final kilometre.">
-  <meta property="og:image" content="assets/gel-orange.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0a0a'/%3E%3Cpath d='M8 9l8 15 8-15' fill='none' stroke='%23fff' stroke-width='3'/%3E%3C/svg%3E">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projekty — VELOR · KVAS</title>
+  <meta name="robots" content="noindex">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="assets/gel-orange.webp" type="image/webp">
-  <link rel="stylesheet" href="styles.css">
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": "VELOR Energy Gel",
-    "brand": { "@type": "Brand", "name": "VELOR" },
-    "description": "Energy gel for runners: 30 g carbohydrate in 60 ml, 2:1 glucose–fructose. Six flavours.",
-    "image": "assets/gel-orange.png",
-    "offers": { "@type": "Offer", "priceCurrency": "EUR", "price": "36.00", "availability": "https://schema.org/InStock" }
-  }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root { --paper: #f7f6f3; --ink: #0e0e0d; --mute: #75736d; --line: rgba(14,14,13,.14); }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100svh; background: var(--paper); color: var(--ink); font: 400 16px/1.5 Geist, system-ui, sans-serif; display: flex; flex-direction: column; justify-content: center; padding: 48px clamp(16px, 5vw, 64px); }
+    p { margin: 0 0 28px; font: 500 12px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+    a { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 22px 0; border-top: 1px solid var(--line); color: inherit; text-decoration: none; font-size: clamp(36px, 8vw, 96px); letter-spacing: -.04em; line-height: 1; transition: padding .4s cubic-bezier(.23,1,.32,1); }
+    a:last-of-type { border-bottom: 1px solid var(--line); }
+    a:hover { padding-left: 16px; }
+    a span { font: 500 13px/1 "Geist Mono", monospace; letter-spacing: .04em; color: var(--mute); text-transform: uppercase; }
+  </style>
 </head>
 <body>
-  <a class="skip" href="#flavours">Skip to flavours</a>
-
-  <header class="nav" id="nav">
-    <a class="logo" href="#top" aria-label="VELOR home">
-      <span>VELOR</span>
-    </a>
-    <nav class="nav-links" aria-label="Primary">
-      <a href="#flavours">Flavours</a>
-      <a href="#formula">Formula</a>
-      <a href="#protocol">Protocol</a>
-    </nav>
-    <div class="nav-actions">
-      <a class="nav-shop" href="#shop">Shop</a>
-      <button class="nav-cart" type="button" id="cartOpen" aria-haspopup="dialog" aria-controls="cart">Cart <span class="cart-count" id="cartCount" aria-label="items in cart">0</span></button>
-    </div>
-  </header>
-
-  <main id="top">
-    <!-- ================= INTRO: hero + blackout manifesto (one pinned scene) ================= -->
-    <section class="intro" id="intro" aria-label="Introduction">
-      <div class="intro-stage">
-        <div class="hero">
-          <div class="hero-copy">
-            <h1 class="hero-title" data-split>Fuel the final kilometre.</h1>
-            <a class="hero-cta" href="#flavours">Shop flavours <span aria-hidden="true">→</span></a>
-          </div>
-
-          <div class="packs" id="packs"></div>
-        </div>
-
-        <div class="blackout" id="blackout" aria-hidden="false">
-          <p class="manifesto" id="manifesto">No sugar crash. No sticky hands. No guessing. Just thirty grams of fuel, ready the moment your legs ask&nbsp;for&nbsp;it.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= FLAVOURS ================= -->
-    <section class="flavours" id="flavours" aria-labelledby="flavours-title">
-      <div class="wrap">
-        <header class="sec-head">
-          <h2 id="flavours-title" data-split>Six flavours. One formula.</h2>
-        </header>
-
-        <div class="fl">
-          <ol class="fl-list" id="flList" role="tablist" aria-label="Flavours"></ol>
-
-          <div class="fl-stage" aria-live="polite">
-            <img class="fl-pack" id="flPack" src="assets/gel-orange.webp" width="390" height="1100" alt="VELOR energy gel — Orange">
-          </div>
-
-          <div class="fl-info">
-            <h3 class="fl-name" id="flName">Orange</h3>
-            <p class="fl-note" id="flNote">Bright and juicy, with a little zest.</p>
-            <dl class="fl-specs">
-              <div><dt>Carbohydrate</dt><dd id="flCarb">30 g</dd></div>
-              <div><dt>Sodium</dt><dd id="flSodium">200 mg</dd></div>
-              <div><dt>Caffeine</dt><dd id="flCaf">—</dd></div>
-              <div><dt>Energy</dt><dd>120 kcal</dd></div>
-            </dl>
-            <button class="btn btn--ink" type="button" id="flAdd">
-              <span class="btn-label">Add to cart</span><span class="btn-price">€3.20</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= FORMULA (pinned horizontal track) ================= -->
-    <section class="formula" id="formula" aria-labelledby="formula-title">
-      <div class="formula-stage">
-        <div class="formula-panel" id="formulaPanel">
-          <div class="formula-head">
-            <h2 id="formula-title" data-split>Four numbers. Nothing else.</h2>
-          </div>
-          <div class="track" id="track">
-            <article class="stat">
-              <p class="stat-n"><span class="count" data-to="30">30</span><small>g</small></p>
-              <h3>Carbohydrate</h3>
-              <p>Per gel. Enough for roughly 30 minutes at marathon pace.</p>
-            </article>
-            <article class="stat">
-              <p class="stat-n">2<small>:</small>1</p>
-              <h3>Glucose to fructose</h3>
-              <p>Two transport routes into the blood, so more fuel gets through, with less gut stress.</p>
-            </article>
-            <article class="stat">
-              <p class="stat-n"><span class="count" data-to="200">200</span><small>mg</small></p>
-              <h3>Sodium</h3>
-              <p>Replaces what you sweat out. Lemon doubles it for hot days.</p>
-            </article>
-            <article class="stat">
-              <p class="stat-n"><span class="count" data-to="60">60</span><small>ml</small></p>
-              <h3>Liquid, not paste</h3>
-              <p>Thin enough to swallow mid-stride. No water needed to wash it down.</p>
-            </article>
-          </div>
-          <div class="formula-bar" aria-hidden="true"><i id="formulaBar"></i></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= PROTOCOL ================= -->
-    <section class="protocol" id="protocol" aria-labelledby="protocol-title">
-      <div class="wrap">
-        <header class="sec-head">
-          <h2 id="protocol-title" data-split>How to fuel a marathon.</h2>
-        </header>
-
-        <div class="route" id="route">
-          <svg class="route-svg" viewBox="0 52 1200 200" preserveAspectRatio="none" aria-hidden="true">
-            <line class="route-base" x1="0" y1="250" x2="1200" y2="250"/>
-            <path class="route-fill" d="M0 200 C 80 196 120 150 190 160 S 300 210 380 180 S 470 90 560 110 S 660 190 740 170 S 840 60 930 80 S 1050 170 1120 150 S 1180 130 1200 128 L1200 250 L0 250 Z"/>
-            <path class="route-line" id="routeLine" pathLength="1" d="M0 200 C 80 196 120 150 190 160 S 300 210 380 180 S 470 90 560 110 S 660 190 740 170 S 840 60 930 80 S 1050 170 1120 150 S 1180 130 1200 128"/>
-          </svg>
-          <div class="route-km" aria-hidden="true"><span>0</span><span>10</span><span>20</span><span>30</span><span>42.2 km</span></div>
-        </div>
-
-        <ol class="steps">
-          <li class="step" data-at=".08">
-            <span class="step-t">−15 min</span>
-            <h3>One before the gun.</h3>
-            <p>Tops up the tank while you wait in the corral.</p>
-          </li>
-          <li class="step" data-at=".35">
-            <span class="step-t">Every 35 min</span>
-            <h3>One, with a sip of water.</h3>
-            <p>Start early, before you feel you need it.</p>
-          </li>
-          <li class="step" data-at=".62">
-            <span class="step-t">Final 10 km</span>
-            <h3>Switch to Berry.</h3>
-            <p>100 mg of caffeine for when the race really starts.</p>
-          </li>
-        </ol>
-      </div>
-    </section>
-  </main>
-
-  <!-- ================= FOOTER ================= -->
-  <footer class="foot" id="shop">
-    <div class="wrap">
-      <div class="foot-top">
-        <div class="foot-offer">
-          <h2>All six flavours.<br>Twelve gels.</h2>
-          <button class="btn btn--paper" type="button" id="boxAdd"><span class="btn-label">Order the starter box</span><span class="btn-price">€36</span></button>
-        </div>
-        <form class="foot-news" id="news" novalidate>
-          <label for="email">Race-day notes, once a month.</label>
-          <div class="field">
-            <input id="email" type="email" placeholder="you@email.com" autocomplete="email" required>
-            <button type="submit" aria-label="Subscribe">→</button>
-          </div>
-          <p class="field-msg" id="newsMsg" role="status"></p>
-        </form>
-      </div>
-
-      <div class="foot-mid">
-        <a class="foot-logo" href="#top" aria-label="Back to top">VELOR</a>
-        <nav class="foot-cols" aria-label="Footer">
-          <div>
-            <p>Shop</p>
-            <a href="#flavours">Flavours</a>
-            <a href="#shop">Starter box</a>
-            <a href="checkout.html">Checkout</a>
-          </div>
-          <div>
-            <p>Learn</p>
-            <a href="#formula">Formula</a>
-            <a href="#protocol">Protocol</a>
-          </div>
-          <div>
-            <p>Contact</p>
-            <a href="mailto:hello@velor.example">hello@velor.example</a>
-            <a href="#" aria-disabled="true">Instagram</a>
-            <a href="#" aria-disabled="true">Strava club</a>
-          </div>
-        </nav>
-      </div>
-
-      <div class="foot-base">
-        <span>© 2026 VELOR Sports Nutrition</span>
-        <a href="#top">Back to top ↑</a>
-      </div>
-    </div>
-  </footer>
-
-  <div class="cart-scrim" id="cartScrim" hidden></div>
-  <aside class="cart" id="cart" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true" inert>
-    <header class="cart-head">
-      <h2 id="cartTitle">Cart <span id="cartHeadCount">0</span></h2>
-      <button class="cart-x" type="button" id="cartClose" aria-label="Close cart"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-    </header>
-    <div class="cart-ship" id="cartShip"><p id="cartShipText"></p><span class="cart-ship-bar"><i id="cartShipBar"></i></span></div>
-    <ul class="cart-items" id="cartItems"></ul>
-    <div class="cart-empty" id="cartEmpty">
-      <p>Your cart is empty.</p>
-      <a class="btn btn--ink" href="#flavours" data-close-cart><span class="btn-label">Browse flavours</span><span class="btn-price">→</span></a>
-    </div>
-    <footer class="cart-foot" id="cartFoot">
-      <div class="cart-row"><span>Subtotal</span><span id="cartSubtotal">€0.00</span></div>
-      <div class="cart-row cart-row--mute"><span>Shipping</span><span id="cartShipping">—</span></div>
-      <div class="cart-row cart-row--total"><span>Total</span><span id="cartTotal">€0.00</span></div>
-      <a class="btn btn--ink cart-checkout" href="checkout.html" id="cartCheckout"><span class="btn-label">Checkout</span><span class="btn-price" id="cartCheckoutPrice">€0.00</span></a>
-    </footer>
-  </aside>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <script src="main.js" defer></script>
+  <p>Projekty</p>
+  <a href="velor/">VELOR <span>Energy gel · /velor</span></a>
+  <a href="bakery/">KVAS <span>Pekáreň · /bakery</span></a>
 </body>
 </html>
