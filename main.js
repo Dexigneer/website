@@ -22,7 +22,9 @@
   $$('[data-split]').forEach(el => {
     const words = el.textContent.trim().split(/\s+/);
     el.setAttribute('aria-label', el.textContent.trim());
-    el.innerHTML = words.map((w, i) => `<span class="w" aria-hidden="true"><span style="--i:${i}">${w}</span></span>`).join(' ');
+    const br = el.dataset.br === undefined ? -1 : +el.dataset.br;   // optional forced line break after word #br
+    el.innerHTML = words.map((w, i) => `<span class="w" aria-hidden="true"><span style="--i:${i}">${w}</span></span>` +
+      (i === words.length - 1 ? '' : i === br ? '<br>' : ' ')).join('');
   });
   const io = new IntersectionObserver(es => es.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }

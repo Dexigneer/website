@@ -101,7 +101,7 @@ html.cart-lock, html.cart-lock body { overflow: hidden; }
 .nav-actions { justify-self: end; display: flex; align-items: center; gap: 8px; font-size: 14px; }
 .nav-shop {
   padding: 10px 20px; border-radius: 0; background: var(--ink); color: var(--paper); font-weight: 500;
-  transition: transform .16s var(--ease-out), background-color .35s, color .35s;
+  transition: transform .16s var(--ease-out), background-color .2s, color .35s;
 }
 .nav--dark .nav-shop { background: var(--paper); color: var(--ink); }
 .nav-shop:active { transform: scale(.96); }
@@ -309,9 +309,13 @@ html.cart-lock, html.cart-lock body { overflow: hidden; }
 .btn--ink .btn-price { background: rgba(255, 255, 255, .12); }
 .btn--paper { background: var(--paper); color: var(--ink); min-width: 260px; }
 .btn--paper .btn-price { background: rgba(0, 0, 0, .07); }
+.btn { transition: transform .16s var(--ease-out), background-color .2s ease; }
 @media (hover: hover) {
-  .btn--ink:hover .btn-price { background: var(--paper); color: var(--ink); }
-  .btn--paper:hover .btn-price { background: var(--ink); color: var(--paper); }
+  .btn--ink:hover { background: #2b2b2b; }
+  .btn--paper:hover { background: #e6e6e6; }
+  .nav-shop:hover, .hero-cta:hover { background: #2b2b2b; }
+  .nav--dark .nav-shop:hover { background: #e6e6e6; }
+  .btn:disabled:hover { background: var(--ink); }
 }
 
 /* ==========================================================================
@@ -531,14 +535,14 @@ main { position: relative; z-index: 2; background: var(--paper); }
   .nav-links { display: none; }
   .nav-actions { gap: 14px; }
   /* hero: bigger type, a CTA, and the six packs fanned out like a hand of cards */
-  .hero-copy { top: calc(var(--nav-h) + 9vh); transform: none; }
-  .hero-title { font-size: clamp(40px, 12vw, 64px); line-height: .95; max-width: 10ch; }
+  .hero-copy { top: calc(var(--nav-h) + 15vh); transform: none; }
+  .hero-title { font-size: min(calc((100vw - 2 * var(--gutter)) / 7.9), 80px); line-height: .95; max-width: none; white-space: nowrap; }
   .hero-cta {
     display: inline-flex; align-items: center; gap: 10px; margin-top: 26px;
     height: 48px; padding: 0 22px; border-radius: 0;
     background: var(--ink); color: var(--paper); font-size: 15px; font-weight: 500;
     opacity: 0; transform: translateY(10px);
-    transition: opacity .8s .55s var(--ease-out), transform .8s .55s var(--ease-out);
+    transition: opacity .8s .55s var(--ease-out), transform .8s .55s var(--ease-out), background-color .2s ease;
   }
   .hero-cta:active { transform: scale(.97); }
   .loaded .hero-cta { opacity: 1; transform: none; }
@@ -558,7 +562,8 @@ main { position: relative; z-index: 2; background: var(--paper); }
   .intro { height: 300vh; }
   .fl { grid-template-columns: 1fr; }
   .flavours { padding-top: calc(var(--nav-h) + 36px); display: block; }
-  .manifesto { text-align: left; width: 100%; }
+  .blackout { padding: 0 calc(var(--gutter) + 14px); }
+  .manifesto { text-align: left; width: 100%; font-size: clamp(30px, 10.2vw, 48px); line-height: 1.22; letter-spacing: -.03em; }
   .fl-stage { height: 42vh; min-height: 280px; max-height: 420px; }
   .fl { gap: 24px; }
   .fl-specs div { padding: 11px 0; }
@@ -594,7 +599,6 @@ main { position: relative; z-index: 2; background: var(--paper); }
 @media (max-width: 380px) {
   .logo span { font-size: 15px; letter-spacing: .26em; }
   .nav-shop { padding: 7px 12px; }
-  .hero-title { font-size: 38px; }
   .fl-btn { padding: 9px 13px; font-size: 14px; }
 }
 
