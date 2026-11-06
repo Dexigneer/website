@@ -500,3 +500,8 @@ body { font-synthesis-weight: none; }
 .clock { font-size: clamp(72px, 8vw, 132px); }
 @media (max-width: 860px) { .ing-qty { font-size: clamp(30px, 9vw, 44px); } .clock { font-size: clamp(54px, 15vw, 80px); } }
 .ring text { letter-spacing: 6px; }
+
+/* Counter: bread on the page itself, centred name and note, no prices */
+.card-media, .card:hover .card-media { background: none; overflow: visible; }
+.card-body { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 6px; padding-top: 10px; }
+.card-meta { grid-column: auto; }
