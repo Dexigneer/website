@@ -49,7 +49,8 @@
   --ember: #c4682e;
 
   --serif: "Golden Goose", "Fraunces", Georgia, serif;
-  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --sans: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --ui: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   --gutter: clamp(16px, 4vw, 56px);
@@ -474,3 +475,26 @@ body { font-synthesis-weight: none; }
 /* the three visit columns start on one line */
 .visit-grid > * { align-self: stretch; }
 .course { align-self: stretch; }
+
+/* ==========================================================================
+   Buttons: cream pill, ink outline, solid offset shadow that the button
+   presses into. Labels keep their current faces.
+   ========================================================================== */
+.btn, .btn--ink, .btn--line, .nav-cta {
+  --bg: var(--paper); --fg: var(--ink);
+  background: var(--bg); color: var(--fg);
+  border: 2px solid var(--ink);
+  box-shadow: 4px 6px 0 0 var(--ink);
+  transition: transform .14s var(--ease-out), box-shadow .14s var(--ease-out), background-color .2s ease;
+}
+.btn:hover, .btn--ink:hover, .btn--line:hover, .nav-cta:hover {
+  --bg: #fffdf9; background: var(--bg); color: var(--ink);
+  transform: translate(-1px, -1px); box-shadow: 5px 7px 0 0 var(--ink);
+}
+.btn:active, .nav-cta:active { transform: translate(4px, 6px); box-shadow: 0 0 0 0 var(--ink); }
+.nav-cta, .btn--line { font-family: var(--ui); }
+.nav-cta { height: 38px; margin-right: 4px; }
+.btn--line { margin-bottom: 6px; }
+.hero-cta { margin-bottom: 6px; }
+/* the nav keeps the ink outline readable over the blurred bar */
+.nav.is-dark .nav-cta { --bg: var(--paper); color: var(--ink); }
