@@ -1,5 +1,5 @@
 /* Proofhouse — interactions
-   Lenis smooth scroll + GSAP ScrollTrigger scenes and the live bake board.
+   Lenis smooth scroll + GSAP ScrollTrigger scenes.
    Everything works without the animation layer; motion is an enhancement. */
 (() => {
   'use strict';
@@ -14,7 +14,7 @@
   if (reduced) root.classList.add('reduced');
 
   /* ------------------------------------------------------------------
-     Time in Bratislava — drives today's hours and the bake board.
+     Time in Bratislava — highlights today's opening hours.
      ------------------------------------------------------------------ */
   const DAYS = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
   const HOURS = { 1: [420, 1140], 2: [420, 1140], 3: [420, 1140], 4: [420, 1140], 5: [420, 1140], 6: [450, 840] };
@@ -44,33 +44,8 @@
     });
     const nowEl = $('[data-now]');
     if (nowEl) nowEl.textContent = t.label;
-    renderBakes(t);
   }
 
-  function renderBakes(t) {
-    const rows = $$('[data-bake]');
-    let nextFound = false;
-    const open = HOURS[t.day];
-    rows.forEach(row => {
-      const at = parseInt(row.dataset.bake, 10);
-      const days = (row.dataset.days || '1,2,3,4,5,6').split(',').map(Number);
-      const state = $('.bake-state', row);
-      row.classList.remove('is-fresh', 'is-next', 'is-done');
-      if (!open || !days.includes(t.day)) {
-        state.textContent = !open ? (nextOpening(t).startsWith('tomorrow') ? 'Tomorrow' : 'Next opening') : 'Weekdays only';
-        return;
-      }
-      if (t.min >= at && t.min < at + 45) { row.classList.add('is-fresh'); state.textContent = 'Fresh out'; return; }
-      if (t.min >= at + 45) { row.classList.add('is-done'); state.textContent = 'On the counter'; return; }
-      if (!nextFound) {
-        nextFound = true; row.classList.add('is-next');
-        const d = at - t.min, h = Math.floor(d / 60), m = d % 60;
-        state.textContent = `in ${h ? h + ' h ' : ''}${m} min`;
-        return;
-      }
-      state.textContent = 'Later today';
-    });
-  }
   renderStatus();
   setInterval(renderStatus, 30000);
 
@@ -143,33 +118,6 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 
   /* ------------------------------------------------------------------
-     Bake board: the bread follows the cursor (desktop)
-     ------------------------------------------------------------------ */
-  const peek = $('[data-peek]');
-  if (peek && fine && !reduced) {
-    const img = $('img', peek);
-    let tx = 0, ty = 0, x = 0, y = 0, rot = 0, sc = .6, on = false, raf = 0;
-    const loop = () => {
-      const vx = tx - x;
-      x += (tx - x) * .14; y += (ty - y) * .14;
-      rot += (Math.max(-25, Math.min(25, vx * .25)) - rot) * .12;
-      sc += ((on ? 1 : .6) - sc) * .14;
-      peek.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${rot}deg) scale(${sc})`;
-      raf = (on || Math.abs(sc - .6) > .01) ? requestAnimationFrame(loop) : 0;
-    };
-    $$('[data-bake]').forEach(row => {
-      row.addEventListener('mouseenter', e => {
-        if (img.getAttribute('src') !== row.dataset.img) img.src = row.dataset.img;
-        if (!on) { x = tx = e.clientX; y = ty = e.clientY; }
-        on = true; peek.classList.add('is-on');
-        if (!raf) raf = requestAnimationFrame(loop);
-      });
-      row.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
-      row.addEventListener('mouseleave', () => { on = false; peek.classList.remove('is-on'); });
-    });
-  }
-
-  /* ------------------------------------------------------------------
      GSAP scenes
      ------------------------------------------------------------------ */
   if (!animate) { root.classList.add('ready'); onScroll(); return; }
@@ -184,7 +132,7 @@
     .from('[data-word]', { yPercent: 115, duration: 1.5, stagger: .1 }, .1)
     .from('[data-loaf]', { yPercent: 38, duration: 2.2, ease: 'expo.out' }, 0)
     .from('.loaf-spin', { rotate: -80, duration: 2.4, ease: 'expo.out' }, 0)
-    .from('[data-intro]', { y: 18, opacity: 0, duration: 1.2, stagger: .08 }, .45)
+    .from('[data-intro]', { y: 18, opacity: 0, duration: 1.2, stagger: .08, clearProps: 'transform,opacity' }, .45)
     .from('.nav', { y: -20, opacity: 0, duration: 1, clearProps: 'transform,opacity' }, .6);
 
   // 1 → 2 · The loaf finishes rising: hero holds while the bread climbs into full view
@@ -252,20 +200,6 @@
     onEnter: els => gsap.from(els, { rotate: -35, scale: .86, duration: 1.6, ease: 'expo.out', stagger: .09 }),
   });
 
-  // 5 · Bake board rows draw in
-  ScrollTrigger.batch('.bake', {
-    start: 'top 92%', once: true,
-    onEnter: els => gsap.from(els, { y: 26, opacity: 0, duration: 1, ease: 'expo.out', stagger: .07 }),
-  });
-
-  // 6 · The street name rises letter by letter
-  const street = $('[data-street] span');
-  if (street) {
-    const txt = street.textContent;
-    street.setAttribute('aria-label', txt);
-    street.innerHTML = [...txt].map(ch => `<span class="ch" aria-hidden="true" style="display:inline-block">${ch}</span>`).join('');
-    gsap.from($$('.ch', street), { yPercent: 105, duration: 1.4, ease: 'expo.out', stagger: .05, scrollTrigger: { trigger: '[data-street]', start: 'top 85%', once: true } });
-  }
   gsap.from('.visit-grid > *', { y: 30, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: .1, scrollTrigger: { trigger: '.visit-grid', start: 'top 88%', once: true } });
 
   mm.add('(max-width: 860px)', () => {

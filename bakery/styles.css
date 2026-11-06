@@ -427,3 +427,28 @@ em { font-style: italic; }
   .hero-lede { white-space: normal; max-width: 320px; font-size: 16px; }
   .hero-cta { min-width: 0; width: 100%; max-width: 340px; }
 }
+
+/* Visit — compact */
+.navsteva { padding: clamp(72px, 11vh, 120px) 0 clamp(80px, 12vh, 130px); }
+.visit-grid { margin-top: 0; padding-top: 0; border-top: 1px solid var(--ink); grid-template-columns: 1fr 1fr 1fr; gap: 0; }
+.visit-grid > * { padding: 24px 28px 4px; border-left: 1px solid var(--line); display: flex; flex-direction: column; gap: 14px; }
+.visit-grid > *:first-child { padding-left: 0; border-left: 0; }
+.visit-big { margin: 0; font-size: clamp(20px, 1.8vw, 26px); line-height: 1.15; }
+.visit-where .btn { align-self: flex-start; margin-top: 6px; }
+.hours div:first-child { padding-top: 0; }
+.course { background: none; padding-right: 0; border-radius: 0; }
+.course:hover { transform: none; }
+.course-title { font-size: clamp(20px, 1.8vw, 26px); }
+@media (max-width: 860px) {
+  .visit-grid { grid-template-columns: 1fr; }
+  .visit-grid > *, .visit-grid > *:first-child { padding: 22px 0; border-left: 0; border-bottom: 1px solid var(--line); }
+  .visit-grid > *:last-child { border-bottom: 0; }
+}
+
+/* Hero rhythm: equal visible gaps (headline → intro → button). The caps face
+   leaves ~0.27em of empty line box under the letters, so the row pulls up by it. */
+.hero-copy { --tfs: clamp(64px, 12.4vw, 196px); }
+.hero-title { font-size: var(--tfs); }
+.hero-row { margin-top: calc(26px - .27 * var(--tfs)); gap: 17px; }
+@media (max-width: 860px) { .hero-copy { --tfs: clamp(56px, 19vw, 110px); } .hero-row { margin-top: calc(24px - .3 * var(--tfs)); } }
+@media (max-height: 720px) and (min-width: 861px) { .hero-copy { --tfs: clamp(64px, 20vh, 196px); } }
