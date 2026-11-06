@@ -195,14 +195,14 @@
   // 4 · Cards land on the counter
   ScrollTrigger.batch('.card', {
     start: 'top 92%', once: true,
-    onEnter: els => gsap.from(els, { y: 60, opacity: 0, duration: 1.2, ease: 'expo.out', stagger: .09 }),
+    onEnter: els => gsap.from(els, { y: 60, opacity: 0, duration: 1.2, ease: 'expo.out', stagger: .09, clearProps: 'transform,opacity' }),
   });
-  ScrollTrigger.batch('.card-media img', {
+  ScrollTrigger.batch('.card-shadow', {
     start: 'top 92%', once: true,
-    onEnter: els => gsap.from(els, { rotate: -35, scale: .86, duration: 1.6, ease: 'expo.out', stagger: .09 }),
+    onEnter: els => gsap.from(els, { rotate: -35, scale: .86, duration: 1.6, ease: 'expo.out', stagger: .09, clearProps: 'transform' }),
   });
 
-  gsap.from('.visit-grid > *', { y: 30, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: .1, scrollTrigger: { trigger: '.visit-grid', start: 'top 88%', once: true } });
+  gsap.from('.visit-grid > *', { y: 30, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: .1, clearProps: 'transform,opacity', scrollTrigger: { trigger: '.visit-grid', start: 'top 88%', once: true } });
 
   mm.add('(max-width: 860px)', () => {
     // smaller travel on phones
