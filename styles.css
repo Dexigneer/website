@@ -197,10 +197,31 @@ html.cart-lock, html.cart-lock body { overflow: hidden; }
   will-change: clip-path;
 }
 .blackout.full { pointer-events: auto; }
+/* triptych above the manifesto: three photos share one height, keep their own shapes */
+.mf {
+  --gap: clamp(10px, 1.2vw, 18px);
+  --ph: min(46vh, calc((min(100vw, var(--max)) - 2 * var(--gutter) - 2 * var(--gap)) / 2.8));
+  width: 100%;
+  padding-top: var(--nav-h);
+  display: flex; flex-direction: column; align-items: center; gap: clamp(28px, 5vh, 56px);
+}
+.mf-photos { display: flex; gap: var(--gap); justify-content: center; }
+.mf-photo {
+  --r: 0;
+  margin: 0; height: var(--ph); overflow: hidden; background: #161616;
+  clip-path: inset(calc((1 - var(--r)) * 100%) 0 0 0);
+}
+.mf-photo--sq { aspect-ratio: 1 / 1; }
+.mf-photo--tall { aspect-ratio: 4 / 5; }
+.mf-photo img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transform: scale(calc(1.14 - .14 * var(--r))); transform-origin: 50% 70%;
+  filter: grayscale(1) contrast(1.04);
+}
 .manifesto {
   width: min(100%, 15.25em);
   font-weight: 500;
-  font-size: clamp(28px, 4.2vw, 64px);
+  font-size: clamp(24px, min(3vw, 5.2vh), 46px);
   line-height: 1.06;
   letter-spacing: -.035em;
   text-align: justify;
@@ -563,7 +584,12 @@ main { position: relative; z-index: 2; background: var(--paper); }
   .fl { grid-template-columns: 1fr; }
   .flavours { padding-top: calc(var(--nav-h) + 36px); display: block; }
   .blackout { padding: 0 calc(var(--gutter) + 14px); }
-  .manifesto { text-align: left; width: 100%; font-size: clamp(30px, 10.2vw, 48px); line-height: 1.22; letter-spacing: -.03em; }
+  .mf { gap: clamp(22px, 3.6vh, 36px); }
+  .mf-photos { width: 100%; }
+  .mf-photo, .mf-photo--sq, .mf-photo--tall { flex: 1 1 0; aspect-ratio: auto; height: min(38vh, 320px); }
+  .mf-photo:nth-child(1) img { object-position: 52% 60%; }
+  .mf-photo:nth-child(3) img { object-position: 58% 75%; }
+  .manifesto { text-align: left; width: 100%; font-size: clamp(24px, min(8.2vw, 4.4vh), 40px); line-height: 1.2; letter-spacing: -.03em; }
   .fl-stage { height: 42vh; min-height: 280px; max-height: 420px; }
   .fl { gap: 24px; }
   .fl-specs div { padding: 11px 0; }
@@ -609,7 +635,8 @@ main { position: relative; z-index: 2; background: var(--paper); }
   .hero-title { font-size: clamp(34px, 8vh + 2vw, 64px); max-width: 16ch; }
   .packs { --w: clamp(40px, 7.5vw, 90px); --raise: 0px; }
   .pack { --hide: 46%; --show: .54; }
-  .manifesto { font-size: clamp(22px, 6vh, 40px); max-width: 28ch; }
+  .manifesto { font-size: clamp(18px, 5vh, 30px); max-width: 30ch; }
+  .mf { --ph: 34vh; gap: 16px; }
   .flavours { min-height: 0; }
   .fl { grid-template-columns: 1fr 1fr; }
   .fl-stage { height: 70vh; min-height: 240px; }

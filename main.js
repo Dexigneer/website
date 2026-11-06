@@ -35,6 +35,7 @@
   const manifesto = $('#manifesto');
   manifesto.innerHTML = manifesto.textContent.trim().split(/[ \t\n\r]+/).map(w => `<span class="mw">${w}</span>`).join(' ');
   const mWords = $$('.mw', manifesto);
+  const mfPhotos = $$('.mf-photo');
 
   /* ---------- hero packs ---------- */
   const packsEl = $('#packs');
@@ -329,7 +330,9 @@
     const onDisc = over(intro) && discT * R >= Math.hypot(vw / 2, vh - navY);
     navEl.classList.toggle('nav--dark', onDisc || over(formula) || over(footEl));
 
-    const wordsT = clamp((p - .4) / .48);
+    /* photos rise in one after another as the disc completes, then the words light up */
+    mfPhotos.forEach((f, i) => f.style.setProperty('--r', reduce ? 1 : easeOut(clamp((p - .3 - i * .05) / .16)).toFixed(3)));
+    const wordsT = clamp((p - .5) / .4);
     const lit = Math.round(wordsT * mWords.length);
     mWords.forEach((w, i) => w.classList.toggle('on', i < lit));
 
