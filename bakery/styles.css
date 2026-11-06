@@ -534,3 +534,5 @@ body { font-synthesis-weight: none; }
 @media (prefers-reduced-motion: reduce) { .menu nav a { transform: none; } }
 .menu-btn { box-shadow: 3px 4px 0 0 var(--ink); transition: transform .14s var(--ease-out), box-shadow .14s var(--ease-out); }
 .menu-btn:active { transform: translate(3px, 4px); box-shadow: 0 0 0 0 var(--ink); }
+/* Ring around the hero loaf in the serif text face */
+.ring text { font: 500 16px var(--sans); letter-spacing: 5px; }
