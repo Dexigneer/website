@@ -536,3 +536,10 @@ body { font-synthesis-weight: none; }
 .menu-btn:active { transform: translate(3px, 4px); box-shadow: 0 0 0 0 var(--ink); }
 /* Ring around the hero loaf in the serif text face */
 .ring text { font: 500 16px var(--sans); letter-spacing: 5px; }
+
+/* Logo: the Proofhouse wordmark (vector, takes the text colour) */
+.logo { display: inline-flex; align-items: center; line-height: 0; }
+.logo-mark { display: block; height: 22px; width: auto; transition: transform .3s var(--ease-out); }
+.logo:hover .logo-mark { transform: translateY(-1px); }
+.foot .logo-mark { height: 20px; }
+@media (max-width: 860px) { .logo-mark { height: 18px; } }
