@@ -452,3 +452,8 @@ em { font-style: italic; }
 .hero-row { margin-top: calc(26px - .27 * var(--tfs)); gap: 17px; }
 @media (max-width: 860px) { .hero-copy { --tfs: clamp(56px, 19vw, 110px); } .hero-row { margin-top: calc(24px - .3 * var(--tfs)); } }
 @media (max-height: 720px) and (min-width: 861px) { .hero-copy { --tfs: clamp(64px, 20vh, 196px); } }
+
+/* Headline "Bread takes time": one line on desktop, stacked on phones */
+.hero-copy { --tfs: clamp(56px, 9.4vw, 152px); }
+@media (max-width: 860px) { .hero-copy { --tfs: clamp(52px, 18vw, 104px); } }
+@media (max-height: 720px) and (min-width: 861px) { .hero-copy { --tfs: clamp(56px, 16vh, 152px); } }
