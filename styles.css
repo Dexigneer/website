@@ -13,6 +13,7 @@
   --ghost: #f3f3f3;
 
   --sans: "Inter Tight", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: "South Ghetto", "Inter Tight", ui-sans-serif, system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --gutter: clamp(16px, 3.4vw, 48px);
@@ -21,6 +22,12 @@
   --ease-out: cubic-bezier(.23, 1, .32, 1);
   --ease-io: cubic-bezier(.77, 0, .175, 1);
   --ease-spring: cubic-bezier(.34, 1.4, .64, 1);
+}
+
+@font-face {
+  font-family: "South Ghetto";
+  src: url("assets/fonts/southghetto.woff2") format("woff2"), url("assets/fonts/southghetto.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -127,7 +134,7 @@ html.cart-lock, html.cart-lock body { overflow: hidden; }
   font-size: clamp(40px, 7.2vw, 112px);
   line-height: .95;
   letter-spacing: -.045em;
-  max-width: 11ch; margin: 0 auto;
+  max-width: 17ch; margin: 0 auto;
 }
 .hero-cta { display: none; }
 
@@ -522,7 +529,7 @@ main { position: relative; z-index: 2; background: var(--paper); }
   .nav-actions { gap: 14px; }
   /* hero: bigger type, a CTA, and the six packs fanned out like a hand of cards */
   .hero-copy { top: calc(var(--nav-h) + 9vh); transform: none; }
-  .hero-title { font-size: clamp(44px, 13.6vw, 68px); line-height: .92; max-width: 8.5ch; }
+  .hero-title { font-size: clamp(40px, 12vw, 64px); line-height: .95; max-width: 10ch; }
   .hero-cta {
     display: inline-flex; align-items: center; gap: 10px; margin-top: 26px;
     height: 48px; padding: 0 22px; border-radius: 999px;
@@ -556,7 +563,7 @@ main { position: relative; z-index: 2; background: var(--paper); }
 
   /* formula: no pinning on phones; a calm 2x2 grid of numbers */
   .formula-panel { padding: 64px 0 72px; }
-  .formula-head h2 { max-width: 9ch; }
+  .formula-head h2 { max-width: 11ch; }
   .track {
     margin-top: 40px; gap: 40px 16px;
   }
@@ -688,4 +695,14 @@ main { position: relative; z-index: 2; background: var(--paper); }
 @media (max-width: 480px) {
   .co-form fieldset { grid-template-columns: 1fr; }
   .co-nav { padding: 16px var(--gutter); }
+}
+
+/* ==========================================================================
+   DISPLAY TYPE — every heading is set in South Ghetto
+   ========================================================================== */
+h1, h2, h3, legend, .co-done-t, .cart-done-t {
+  font-family: var(--display);
+  font-weight: 400;
+  font-synthesis: none;
+  letter-spacing: 0;
 }
