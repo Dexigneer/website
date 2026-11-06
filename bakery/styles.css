@@ -457,3 +457,11 @@ em { font-style: italic; }
 .hero-copy { --tfs: clamp(56px, 9.4vw, 152px); }
 @media (max-width: 860px) { .hero-copy { --tfs: clamp(52px, 18vw, 104px); } }
 @media (max-height: 720px) and (min-width: 861px) { .hero-copy { --tfs: clamp(56px, 16vh, 152px); } }
+
+/* Hero: copy sits 25px lower; the rising loaf passes over the copy */
+.hero-copy { padding-top: calc(var(--nav-h) + clamp(28px, 7vh, 84px) + 25px); z-index: 1; }
+.hero-loaf { z-index: 2; }
+@media (max-width: 860px) {
+  .hero-copy { --tfs: clamp(48px, 15.5vw, 96px); }
+  .hero-loaf { transform: translate(-50%, 66%); }
+}

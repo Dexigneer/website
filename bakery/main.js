@@ -140,7 +140,7 @@
     .to('.hero-loaf', { yPercent: -50, ease: 'none' }, 0)
     .to('[data-loaf]', { scale: .78, ease: 'none' }, 0)
     .to('.loaf-spin', { rotate: 90, ease: 'none' }, 0)
-    .to('.hero-copy', { yPercent: -18, opacity: 0, ease: 'none', duration: .6 }, 0);
+    .to('.hero-copy', { yPercent: -6, ease: 'none' }, 0);
 
   // 2 · The recipe is weighed out: bars draw in, numbers count up
   const scale = $('[data-scale]');
