@@ -1,4 +1,13 @@
 @font-face {
+  font-family: "Joy Digits";
+  src: url("assets/fonts/joy-digits.woff2") format("woff2");
+  unicode-range: U+0030-0039;
+  size-adjust: 166%;
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
   font-family: "Golden Goose";
   src: url("assets/fonts/golden-goose.woff2") format("woff2");
   font-weight: 200 400;
@@ -25,9 +34,9 @@
   --line-dark: rgba(244, 242, 237, .16);
   --ember: #c4682e;
 
-  --serif: "Golden Goose", "Fraunces", Georgia, serif;
-  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --serif: "Joy Digits", "Golden Goose", "Fraunces", Georgia, serif;
+  --sans: "Joy Digits", "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Joy Digits", "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   --gutter: clamp(16px, 4vw, 56px);
   --max: 1440px;
@@ -465,3 +474,9 @@ em { font-style: italic; }
   .hero-copy { --tfs: clamp(48px, 15.5vw, 96px); }
   .hero-loaf { transform: translate(-50%, 66%); }
 }
+
+/* Numerals in Joy: a single-weight face, so no faux bold and normal tracking */
+body { font-synthesis-weight: none; }
+.ing-qty, .clock, .card-price, .hours dd { letter-spacing: 0; }
+.clock { gap: 8px; }
+.ing-qty em { font-style: normal; }
