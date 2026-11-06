@@ -1,11 +1,25 @@
+/* Joy: letters scaled to the cap height of the old text face; its short figures
+   get their own scale so numbers stand as tall as capitals. */
+@font-face {
+  font-family: "Joy";
+  src: url("assets/fonts/joy.woff2") format("woff2");
+  unicode-range: U+0000-002F, U+003A-10FFFF;
+  font-weight: 100 900; font-style: normal; font-display: swap;
+  size-adjust: 128%;
+}
+@font-face {
+  font-family: "Joy";
+  src: url("assets/fonts/joy.woff2") format("woff2");
+  unicode-range: U+0030-0039;
+  font-weight: 100 900; font-style: normal; font-display: swap;
+  size-adjust: 166%;
+}
 @font-face {
   font-family: "Joy Digits";
-  src: url("assets/fonts/joy-digits.woff2") format("woff2");
+  src: url("assets/fonts/joy.woff2") format("woff2");
   unicode-range: U+0030-0039;
+  font-weight: 100 900; font-style: normal; font-display: swap;
   size-adjust: 166%;
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
 }
 @font-face {
   font-family: "Golden Goose";
@@ -35,8 +49,8 @@
   --ember: #c4682e;
 
   --serif: "Joy Digits", "Golden Goose", "Fraunces", Georgia, serif;
-  --sans: "Joy Digits", "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "Joy Digits", "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --sans: "Joy", "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Joy", "Geist", "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   --gutter: clamp(16px, 4vw, 56px);
   --max: 1440px;
@@ -480,3 +494,9 @@ body { font-synthesis-weight: none; }
 .ing-qty, .clock, .card-price, .hours dd { letter-spacing: 0; }
 .clock { gap: 8px; }
 .ing-qty em { font-style: normal; }
+
+/* Joy as the text face: compact, single weight. Slightly larger figures where numbers lead. */
+.ing-qty { font-size: clamp(30px, 3vw, 44px); }
+.clock { font-size: clamp(72px, 8vw, 132px); }
+@media (max-width: 860px) { .ing-qty { font-size: clamp(30px, 9vw, 44px); } .clock { font-size: clamp(54px, 15vw, 80px); } }
+.ring text { letter-spacing: 6px; }
