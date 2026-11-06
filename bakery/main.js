@@ -234,7 +234,6 @@
     .fromTo('.proces-stage .stage-img', { scale: .9 }, { scale: 1.04, ease: 'none', duration: 1 }, 0);
 
   // Nav turns light over dark rooms
-  ScrollTrigger.create({ trigger: '.proces', start: 'top 40px', end: 'bottom 40px', toggleClass: { targets: nav, className: 'is-dark' } });
   ScrollTrigger.create({ trigger: '.foot', start: 'top 40px', end: 'bottom top', toggleClass: { targets: nav, className: 'is-dark' } });
 
   // 3 → 4 · A crust-shaped edge rises over the oven and settles flat

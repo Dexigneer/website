@@ -180,7 +180,7 @@ em { font-style: italic; }
 .ing--time .ing-bar { width: 100%; background: repeating-linear-gradient(90deg, var(--ink) 0 5px, transparent 5px 9px); }
 .ing-pct { font: 400 12px/1 var(--mono); color: var(--mute); font-variant-numeric: tabular-nums; }
 
-/* ---------- 3 · process (dark, pinned) ---------- */
+/* ---------- 3 · process (pinned, in the bakery blush) ---------- */
 .proces { position: relative; color: var(--on-dark); }
 .proces-pin { position: relative; height: 100svh; min-height: 640px; display: flex; align-items: center; background: var(--dark); overflow: hidden; }
 .proces-grid { display: grid; grid-template-columns: 1fr minmax(0, 1.25fr) 1fr; align-items: center; gap: clamp(20px, 3vw, 48px); height: 100%; padding-top: var(--nav-h); padding-bottom: 32px; }
@@ -402,3 +402,28 @@ em { font-style: italic; }
   .hero-title { font-size: clamp(64px, 20vh, 196px); }
 }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(196, 104, 46, .45); } 70% { box-shadow: 0 0 0 9px rgba(196, 104, 46, 0); } 100% { box-shadow: 0 0 0 0 rgba(196, 104, 46, 0); } }
+
+/* ==========================================================================
+   Process in the bakery's own colour (the blush of the hero linen)
+   ========================================================================== */
+:root { --blush: #fbece6; --blush-line: rgba(74, 44, 28, .14); --blush-mute: #8a7064; }
+.proces { color: var(--ink); }
+.proces-pin { background: var(--blush); }
+.proces .label--dim { color: var(--blush-mute); }
+.proces-ring .track { stroke: var(--blush-line); }
+.proces-ring .prog { stroke: var(--ink); }
+.stage-img { filter: drop-shadow(0 26px 30px rgba(110, 64, 32, .24)) drop-shadow(0 4px 6px rgba(110, 64, 32, .18)); }
+.clock small, .step-n, .steps p { color: var(--blush-mute); }
+.steps, .steps li { border-color: var(--blush-line); }
+.steps li { opacity: .4; }
+.steps li.is-on { opacity: 1; }
+.crust { background: var(--paper); }
+
+/* Hero: one-line intro, tight and even spacing, a wide type-only button */
+.hero-row { margin-top: clamp(10px, 1.6vh, 16px); gap: clamp(14px, 2.2vh, 22px); }
+.hero-lede { max-width: none; white-space: nowrap; }
+.hero-cta { justify-content: center; min-width: 320px; min-height: 58px; padding: 0 56px; font: 400 18px/1 var(--serif); text-transform: uppercase; letter-spacing: .06em; font-synthesis: none; }
+@media (max-width: 520px) {
+  .hero-lede { white-space: normal; max-width: 320px; font-size: 16px; }
+  .hero-cta { min-width: 0; width: 100%; max-width: 340px; }
+}
