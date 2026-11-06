@@ -1,4 +1,4 @@
-/* KVAS — interactions
+/* Proofhouse — interactions
    Lenis smooth scroll + GSAP ScrollTrigger scenes, live bake board, order bag.
    Everything works without the animation layer; motion is an enhancement. */
 (() => {
@@ -164,9 +164,9 @@
     id: c.dataset.product, name: c.dataset.name, price: parseFloat(c.dataset.price), img: c.dataset.img,
   }]));
   let bag = {};
-  try { bag = JSON.parse(localStorage.getItem('kvas-bag-en') || '{}') || {}; } catch (_) { bag = {}; }
+  try { bag = JSON.parse(localStorage.getItem('proofhouse-bag') || '{}') || {}; } catch (_) { bag = {}; }
   Object.keys(bag).forEach(k => { if (!products[k] || !(bag[k] > 0)) delete bag[k]; });
-  const save = () => { try { localStorage.setItem('kvas-bag-en', JSON.stringify(bag)); } catch (_) {} };
+  const save = () => { try { localStorage.setItem('proofhouse-bag', JSON.stringify(bag)); } catch (_) {} };
   const count = () => Object.values(bag).reduce((a, b) => a + b, 0);
   const total = () => Object.entries(bag).reduce((a, [k, q]) => a + products[k].price * q, 0);
 
@@ -354,19 +354,16 @@
     .to('.loaf-spin', { rotate: 90, ease: 'none' }, 0)
     .to('.hero-copy', { yPercent: -18, opacity: 0, ease: 'none', duration: .6 }, 0);
 
-  // 2 · The recipe is weighed out: bars settle onto the scale, numbers count up
+  // 2 · The recipe is weighed out: bars draw in, numbers count up
   const scale = $('[data-scale]');
   if (scale) {
-    const narrow = window.matchMedia('(max-width: 860px)').matches;
-    const tl = gsap.timeline({ scrollTrigger: { trigger: scale, start: 'top 78%', once: true } });
-    tl.from('.ing-bar', narrow ? { scaleX: 0, duration: 1.3, ease: 'expo.out', stagger: .14 } : { scaleY: 0, duration: 1.3, ease: 'expo.out', stagger: .14 }, 0);
-    $$('[data-to]', $('.recipe')).forEach((el, i) => {
+    const tl = gsap.timeline({ scrollTrigger: { trigger: scale, start: 'top 85%', once: true } });
+    tl.from('.ing-bar', { scaleX: 0, duration: 1.1, ease: 'expo.out', stagger: .1 }, 0);
+    $$('[data-to]', scale).forEach((el, i) => {
       const to = +el.dataset.to, o = { v: 0 };
-      const isTime = !!el.closest('.recipe-time');
       el.textContent = '0';
-      tl.to(o, { v: to, duration: isTime ? 1.6 : 1.1, ease: 'power2.out', onUpdate: () => { el.textContent = Math.round(o.v); } }, isTime ? .7 : i * .14);
+      tl.to(o, { v: to, duration: .9, ease: 'power2.out', onUpdate: () => { el.textContent = Math.round(o.v); } }, i * .1);
     });
-    tl.from('.recipe-note', { opacity: 0, y: 12, duration: .9, ease: 'expo.out' }, 1.2);
   }
 
   const pin = $('.proces-pin');
