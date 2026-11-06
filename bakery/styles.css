@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Golden Goose";
+  src: url("assets/fonts/golden-goose.woff2") format("woff2");
+  font-weight: 200 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ==========================================================================
    Proofhouse — artisan sourdough bakery
    Black, white and the colour of the bread. Nothing else.
@@ -17,7 +25,7 @@
   --line-dark: rgba(244, 242, 237, .16);
   --ember: #c4682e;
 
-  --serif: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --serif: "Golden Goose", "Fraunces", Georgia, serif;
   --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
@@ -114,19 +122,10 @@ em { font-style: italic; }
 .nav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .45s var(--ease-out); }
 .nav-links a:hover::after { transform: scaleX(1); }
 .nav-end { justify-self: end; display: flex; align-items: center; gap: 22px; }
-.status { display: inline-flex; align-items: center; gap: 8px; font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
-.status i { width: 7px; height: 7px; border-radius: 50%; background: var(--ember); box-shadow: 0 0 0 0 rgba(196, 104, 46, .5); animation: pulse 2.4s infinite; }
-.status.is-closed i { background: var(--mute); animation: none; }
-@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(196, 104, 46, .45); } 70% { box-shadow: 0 0 0 9px rgba(196, 104, 46, 0); } 100% { box-shadow: 0 0 0 0 rgba(196, 104, 46, 0); } }
-.bag-btn { display: inline-flex; align-items: center; gap: 10px; height: 40px; padding: 0 6px 0 16px; border-radius: 999px; box-shadow: inset 0 0 0 1px currentColor; font-size: 14px; font-weight: 500; transition: transform .16s var(--ease-out), background-color .2s ease, color .2s ease; }
-.bag-btn:active { transform: scale(.96); }
-.bag-btn:hover { background: var(--ink); color: var(--paper); }
-.nav.is-dark .bag-btn:hover { background: var(--on-dark); color: var(--ink); }
-.bag-count { min-width: 28px; height: 28px; border-radius: 999px; display: grid; place-items: center; background: var(--ink); color: var(--paper); font: 500 12px/1 var(--mono); transition: transform .3s var(--ease-out); }
-.bag-btn:hover .bag-count, .nav.is-dark .bag-count { background: var(--paper); color: var(--ink); }
-.nav.is-dark .bag-btn:hover .bag-count { background: var(--ink); color: var(--paper); }
-.bag-count.bump { animation: bump .5s var(--ease-out); }
-@keyframes bump { 0% { transform: scale(1); } 35% { transform: scale(1.35); } 100% { transform: scale(1); } }
+.nav-cta { display: inline-flex; align-items: center; height: 40px; padding: 0 18px; border-radius: 999px; box-shadow: inset 0 0 0 1px currentColor; font-size: 14px; font-weight: 500; transition: transform .16s var(--ease-out), background-color .2s ease, color .2s ease; }
+.nav-cta:hover { background: var(--ink); color: var(--paper); }
+.nav.is-dark .nav-cta:hover { background: var(--on-dark); color: var(--ink); }
+.nav-cta:active { transform: scale(.96); }
 .menu-btn { display: none; width: 40px; height: 40px; border-radius: 50%; box-shadow: inset 0 0 0 1px currentColor; position: relative; }
 .menu-btn span { position: absolute; left: 12px; right: 12px; height: 1.5px; background: currentColor; transition: transform .4s var(--ease-out); }
 .menu-btn span:first-child { top: 16px; } .menu-btn span:last-child { top: 22px; }
@@ -223,17 +222,6 @@ em { font-style: italic; }
 .card:hover .card-media img { transform: rotate(10deg) scale(1.035); }
 .card-idx { position: absolute; left: 16px; top: 14px; font: 500 12px/1 var(--mono); color: var(--mute); }
 .card-tag { position: absolute; right: 14px; top: 12px; font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
-.card-add {
-  position: absolute; right: 14px; bottom: 14px;
-  height: 44px; min-width: 44px; padding: 0 16px; border-radius: 999px;
-  display: inline-flex; align-items: center; gap: 8px;
-  background: var(--ink); color: var(--paper); font-size: 14px; font-weight: 500;
-  transition: transform .16s var(--ease-out), background-color .2s ease;
-}
-.card-add:hover { background: #2a2926; }
-.card-add:active { transform: scale(.94); }
-.card-add .plus { font: 400 18px/1 var(--mono); transition: transform .4s var(--ease-out); }
-.card-add.added .plus { transform: rotate(90deg); }
 .card-body { display: grid; grid-template-columns: 1fr auto; gap: 2px 16px; padding: 16px 2px 0; }
 .card-name { font: 400 clamp(22px, 1.9vw, 28px)/1.15 var(--serif); letter-spacing: -.015em; }
 .card-price { font: 400 17px/1.5 var(--mono); letter-spacing: -.02em; text-align: right; }
@@ -294,55 +282,6 @@ em { font-style: italic; }
 .foot-links a:hover { opacity: .6; }
 .foot-base { display: flex; justify-content: space-between; gap: 16px; padding-top: 18px; border-top: 1px solid var(--line-dark); font: 500 11px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--on-dark-mute); }
 
-/* ---------- mobile action bar ---------- */
-.actionbar { display: none; }
-
-/* ---------- order drawer ---------- */
-.bag { position: fixed; inset: 0; z-index: 60; }
-.bag[hidden] { display: none; }
-.bag-scrim { position: absolute; inset: 0; background: rgba(14, 14, 13, .42); opacity: 0; transition: opacity .4s ease; }
-.bag-panel { position: absolute; top: 0; right: 0; bottom: 0; width: min(460px, 100%); background: var(--paper); display: flex; flex-direction: column; transform: translateX(100%); transition: transform .5s var(--ease-drawer); overscroll-behavior: contain; }
-.bag.is-open .bag-scrim { opacity: 1; }
-.bag.is-open .bag-panel { transform: none; }
-.bag-head { display: flex; justify-content: space-between; align-items: center; padding: 22px 24px; border-bottom: 1px solid var(--line); }
-.bag-head h2 { font: 300 28px/1 var(--serif); letter-spacing: -.02em; }
-.bag-close { width: 40px; height: 40px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--line); font: 300 24px/1 var(--sans); transition: transform .16s var(--ease-out), box-shadow .2s ease; }
-.bag-close:hover { box-shadow: inset 0 0 0 1px var(--ink); }
-.bag-close:active { transform: scale(.94); }
-.bag-body { flex: 1; overflow: auto; padding: 8px 24px 24px; display: flex; flex-direction: column; }
-.bag-list li { display: grid; grid-template-columns: 64px 1fr auto; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); }
-.bag-list img { width: 64px; height: 64px; object-fit: contain; background: var(--tile); border-radius: 4px; padding: 6px; }
-.bag-item-name { font: 400 18px/1.2 var(--serif); }
-.bag-item-price { font: 400 13px/1.4 var(--mono); color: var(--mute); }
-.qty { display: inline-flex; align-items: center; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line); }
-.qty button { width: 34px; height: 34px; border-radius: 50%; font: 400 16px/1 var(--mono); transition: transform .14s var(--ease-out); }
-.qty button:active { transform: scale(.88); }
-.qty span { min-width: 22px; text-align: center; font: 500 13px/1 var(--mono); }
-.bag-empty { padding: 40px 0; display: flex; flex-direction: column; gap: 14px; align-items: flex-start; color: var(--mute); }
-.bag-form { margin-top: auto; padding-top: 24px; display: flex; flex-direction: column; gap: 14px; }
-.field { display: flex; flex-direction: column; gap: 6px; }
-.field span { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
-.field input, .field select { height: 48px; padding: 0 14px; border: 1px solid var(--line); border-radius: 4px; background: #fff; font: 400 16px var(--sans); color: var(--ink); transition: border-color .2s ease; appearance: none; -webkit-appearance: none; }
-.field select { background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%); background-position: calc(100% - 20px) 21px, calc(100% - 15px) 21px; background-size: 5px 5px; background-repeat: no-repeat; }
-.field input:focus, .field select:focus { outline: none; border-color: var(--ink); }
-.field input[aria-invalid="true"] { border-color: #b3261e; }
-.form-error { min-height: 0; font-size: 14px; color: #b3261e; }
-.form-error:empty { display: none; }
-.fine { font-size: 13px; color: var(--mute); text-align: center; }
-.bag.is-empty .bag-form { display: none; }
-.bag:not(.is-empty) .bag-empty { display: none; }
-.bag-done { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 32px; text-align: center; }
-.bag-done[hidden], .bag-body[hidden] { display: none; }
-.bag-done svg { width: 64px; height: 64px; margin-bottom: 8px; }
-.bag-done svg path { stroke-dasharray: 40; stroke-dashoffset: 40; animation: draw .7s .2s var(--ease-out) forwards; }
-@keyframes draw { to { stroke-dashoffset: 0; } }
-.done-title { font: 300 34px/1.1 var(--serif); letter-spacing: -.02em; }
-.done-text { color: var(--mute); max-width: 300px; margin-bottom: 12px; }
-
-/* toast */
-.toast { position: fixed; left: 50%; bottom: 28px; z-index: 70; transform: translate(-50%, 20px); opacity: 0; padding: 12px 18px; border-radius: 999px; background: var(--ink); color: var(--paper); font-size: 14px; pointer-events: none; transition: transform .4s var(--ease-out), opacity .3s ease; white-space: nowrap; }
-.toast.is-on { transform: translate(-50%, 0); opacity: 1; }
-
 /* ==========================================================================
    Responsive
    ========================================================================== */
@@ -358,10 +297,9 @@ em { font-style: italic; }
 @media (max-width: 860px) {
   :root { --nav-h: 64px; }
   .nav { grid-template-columns: 1fr auto; }
-  .nav-links, .status { display: none; }
+  .nav-links { display: none; }
   .nav-end { gap: 10px; }
   .menu-btn { display: block; }
-  .bag-btn { padding: 0 5px 0 14px; }
 
   .hero-title { flex-direction: column; gap: 0; }
   .hero-lede { max-width: 300px; }
@@ -401,12 +339,6 @@ em { font-style: italic; }
   .ing:nth-child(even) { padding-left: 14px; border-left: 1px solid var(--line); }
   .ing--time { grid-column: 1 / -1; padding-right: 0 !important; }
 
-  .actionbar { display: block; position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 45; transform: translateY(140%); transition: transform .5s var(--ease-drawer); }
-  .actionbar.is-on { transform: none; }
-  .actionbar .btn { width: 100%; min-height: 56px; box-shadow: 0 12px 30px -10px rgba(0, 0, 0, .45); }
-
-  .bag-panel { top: auto; left: 0; width: 100%; max-height: 92svh; border-radius: 16px 16px 0 0; transform: translateY(100%); padding-bottom: env(safe-area-inset-bottom); }
-  .toast { bottom: calc(88px + env(safe-area-inset-bottom)); }
 }
 
 @media (max-width: 520px) {
@@ -416,8 +348,6 @@ em { font-style: italic; }
   .card-name { font-size: 19px; }
   .card-price { text-align: left; font-size: 15px; }
   .card-meta { font-size: 13px; }
-  .card-add { right: 8px; bottom: 8px; height: 40px; min-width: 40px; padding: 0; justify-content: center; }
-  .card-add .t { display: none; }
   .card-idx { left: 10px; top: 10px; }
   .card-tag { display: none; }
 }
@@ -433,3 +363,42 @@ em { font-style: italic; }
 /* Intro guard: hold the first frame until the animation layer takes over (2.5 s fallback) */
 .js:not(.ready) [data-word] { transform: translateY(115%); }
 .js:not(.ready) [data-intro], .js:not(.ready) .loaf-rise, .js:not(.ready) .nav { opacity: 0; }
+
+/* ==========================================================================
+   Golden Goose — an all-caps display face. Every display line is set in caps,
+   at normal tracking; numerals fall back to the mono face.
+   ========================================================================== */
+.hero-title, .h2, .logo-word, .recipe-title, .card-name, .bake-name, .steps h3,
+.visit-big, .street, .course-title, .menu nav a, .foot-say {
+  text-transform: uppercase;
+  font-synthesis: none;
+  font-variation-settings: normal;
+  letter-spacing: 0;
+}
+.hero-title em, .h2 em { font-style: normal; font-weight: 200; }
+.hero-title { font-weight: 400; font-size: clamp(64px, 12.4vw, 196px); line-height: .9; gap: .28em; }
+.hero-title .line { padding: .06em .02em .04em; margin-bottom: 0; }
+.h2 { font-weight: 400; font-size: clamp(34px, 4.4vw, 72px); line-height: .95; }
+.proces-head .h2 { font-size: clamp(34px, 3.6vw, 60px); }
+.logo-word { font: 400 21px/1 var(--serif); letter-spacing: .02em; padding-bottom: 0; }
+.foot .logo-word { font-size: 20px; }
+.logo { align-items: center; gap: 6px; }
+.recipe-title { font-weight: 400; font-size: clamp(22px, 2.2vw, 32px); }
+.ing-qty { font: 300 clamp(30px, 3vw, 44px)/.9 var(--mono); letter-spacing: -.05em; }
+.card-name { font-weight: 400; font-size: clamp(18px, 1.5vw, 22px); line-height: 1.15; }
+.bake-name { font-weight: 400; font-size: clamp(18px, 1.9vw, 26px); }
+.bake-name small { text-transform: none; }
+.steps h3 { font-weight: 400; font-size: 19px; }
+.visit-big { font-weight: 400; font-size: clamp(22px, 2.2vw, 32px); line-height: 1.1; }
+.street { font-weight: 400; font-size: clamp(64px, 19vw, 300px); line-height: .9; margin-left: 0; letter-spacing: 0; padding-top: .2em; }
+.course-title { font-weight: 400; font-size: 20px; line-height: 1.15; }
+.menu nav a { font-weight: 400; font-size: clamp(36px, 10vw, 60px); }
+@media (max-width: 860px) {
+  .hero-title { font-size: clamp(56px, 19vw, 110px); gap: 0; }
+  .proces-head .h2 { font-size: clamp(30px, 8.6vw, 46px); }
+  .ing-qty { font-size: clamp(30px, 9vw, 44px); }
+}
+@media (max-height: 720px) and (min-width: 861px) {
+  .hero-title { font-size: clamp(64px, 20vh, 196px); }
+}
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(196, 104, 46, .45); } 70% { box-shadow: 0 0 0 9px rgba(196, 104, 46, 0); } 100% { box-shadow: 0 0 0 0 rgba(196, 104, 46, 0); } }

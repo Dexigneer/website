@@ -1,5 +1,5 @@
 /* Proofhouse — interactions
-   Lenis smooth scroll + GSAP ScrollTrigger scenes, live bake board, order bag.
+   Lenis smooth scroll + GSAP ScrollTrigger scenes and the live bake board.
    Everything works without the animation layer; motion is an enhancement. */
 (() => {
   'use strict';
@@ -13,11 +13,8 @@
   const animate = hasGsap && !reduced;
   if (reduced) root.classList.add('reduced');
 
-  const eur = new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR' });
-
   /* ------------------------------------------------------------------
-     Time in Bratislava — drives the open status, today's hours and the
-     bake board.
+     Time in Bratislava — drives today's hours and the bake board.
      ------------------------------------------------------------------ */
   const DAYS = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
   const HOURS = { 1: [420, 1140], 2: [420, 1140], 3: [420, 1140], 4: [420, 1140], 5: [420, 1140], 6: [450, 840] };
@@ -42,12 +39,6 @@
 
   function renderStatus() {
     const t = now();
-    const o = HOURS[t.day];
-    const open = !!o && t.min >= o[0] && t.min < o[1];
-    $$('[data-status]').forEach(el => {
-      el.classList.toggle('is-closed', !open);
-      $('span', el).textContent = open ? `Open until ${hm(o[1])}` : `Opens ${nextOpening(t)}`;
-    });
     $$('[data-hours-table] > div').forEach(row => {
       row.classList.toggle('is-today', row.dataset.days.split(',').map(Number).includes(t.day));
     });
@@ -106,7 +97,6 @@
       if (!target) return;
       e.preventDefault();
       closeMenu();
-      if (a.hasAttribute('data-close-bag')) closeBag();
       if (id === '#top' && lenis) lenis.scrollTo(0, { duration: 1.6 });
       else scrollToEl(target);
     });
@@ -121,16 +111,9 @@
     const y = window.scrollY;
     nav.classList.toggle('is-scrolled', y > 24);
     const menuOpen = $('#menu').classList.contains('is-open');
-    nav.classList.toggle('is-hidden', !menuOpen && y > window.innerHeight * 0.9 && y > lastY + 2 && !bagOpen);
+    nav.classList.toggle('is-hidden', !menuOpen && y > window.innerHeight * 0.9 && y > lastY + 2);
     if (y < lastY - 2) nav.classList.remove('is-hidden');
     lastY = y;
-    const bar = $('[data-actionbar]');
-    if (bar) {
-      const foot = $('.foot').getBoundingClientRect().top;
-      const pr = $('.proces').getBoundingClientRect();
-      const inOven = pr.top < window.innerHeight * 0.5 && pr.bottom > window.innerHeight * 0.5;
-      bar.classList.toggle('is-on', y > window.innerHeight * 0.75 && foot > window.innerHeight * 0.95 && !inOven);
-    }
   }
   window.addEventListener('scroll', onScroll, { passive: true });
 
@@ -157,150 +140,7 @@
   }
   menuBtn.addEventListener('click', () => (menu.classList.contains('is-open') ? closeMenu() : openMenu()));
 
-  /* ------------------------------------------------------------------
-     Order bag
-     ------------------------------------------------------------------ */
-  const products = Object.fromEntries($$('[data-product]').map(c => [c.dataset.product, {
-    id: c.dataset.product, name: c.dataset.name, price: parseFloat(c.dataset.price), img: c.dataset.img,
-  }]));
-  let bag = {};
-  try { bag = JSON.parse(localStorage.getItem('proofhouse-bag') || '{}') || {}; } catch (_) { bag = {}; }
-  Object.keys(bag).forEach(k => { if (!products[k] || !(bag[k] > 0)) delete bag[k]; });
-  const save = () => { try { localStorage.setItem('proofhouse-bag', JSON.stringify(bag)); } catch (_) {} };
-  const count = () => Object.values(bag).reduce((a, b) => a + b, 0);
-  const total = () => Object.entries(bag).reduce((a, [k, q]) => a + products[k].price * q, 0);
-
-  const bagEl = $('#bag');
-  let bagOpen = false;
-
-  function renderBag(bump) {
-    const n = count();
-    $$('[data-bag-count]').forEach(el => {
-      el.textContent = n;
-      if (bump) { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
-    });
-    $$('[data-bag-total]').forEach(el => { el.textContent = eur.format(total()); });
-    const barLabel = $('[data-bar-label]'), barTotal = $('.actionbar [data-bar-total]');
-    if (barLabel) {
-      barLabel.textContent = n ? `Your bag · ${n} ${n === 1 ? 'item' : 'items'}` : 'Order for tomorrow';
-      barTotal.textContent = n ? eur.format(total()) : '→';
-    }
-    bagEl.classList.toggle('is-empty', n === 0);
-    const list = $('[data-bag-list]');
-    list.innerHTML = '';
-    Object.entries(bag).forEach(([k, q]) => {
-      const p = products[k];
-      const li = document.createElement('li');
-      li.innerHTML = `<img src="${p.img}" alt="" width="64" height="64">
-        <div><p class="bag-item-name">${p.name}</p><p class="bag-item-price">${eur.format(p.price * q)}</p></div>
-        <div class="qty" role="group" aria-label="Quantity — ${p.name}">
-          <button type="button" data-dec="${k}" aria-label="Remove one">−</button><span>${q}</span><button type="button" data-inc="${k}" aria-label="Add one">+</button>
-        </div>`;
-      list.appendChild(li);
-    });
-  }
-
-  function toast(msg) {
-    let t = $('.toast');
-    if (!t) { t = document.createElement('div'); t.className = 'toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
-    t.textContent = msg;
-    t.classList.add('is-on');
-    clearTimeout(toast.tm);
-    toast.tm = setTimeout(() => t.classList.remove('is-on'), 1800);
-  }
-
-  function flyToBag(img) {
-    if (!animate || !img) return;
-    const target = window.innerWidth <= 860 && $('[data-actionbar]').classList.contains('is-on') ? $('[data-actionbar] .btn') : $('.bag-btn');
-    const a = img.getBoundingClientRect(), b = target.getBoundingClientRect();
-    const c = img.cloneNode();
-    Object.assign(c.style, { position: 'fixed', left: a.left + 'px', top: a.top + 'px', width: a.width + 'px', height: a.height + 'px', zIndex: 80, pointerEvents: 'none', margin: 0 });
-    document.body.appendChild(c);
-    const dx = b.left + b.width / 2 - (a.left + a.width / 2), dy = b.top + b.height / 2 - (a.top + a.height / 2);
-    gsap.timeline({ onComplete: () => c.remove() })
-      .to(c, { x: dx, duration: .8, ease: 'power2.inOut' }, 0)
-      .to(c, { y: dy, duration: .8, ease: 'back.in(1.4)' }, 0)
-      .to(c, { scale: .08, rotate: 220, duration: .8, ease: 'power2.in' }, 0)
-      .to(c, { opacity: 0, duration: .15 }, .68);
-  }
-
-  function add(id, fromBtn) {
-    nav.classList.remove('is-hidden');
-    bag[id] = (bag[id] || 0) + 1;
-    save(); renderBag(true);
-    if (fromBtn) {
-      fromBtn.classList.add('added');
-      setTimeout(() => fromBtn.classList.remove('added'), 500);
-      flyToBag($('img', fromBtn.closest('.card-media')));
-    }
-    toast(`Added to your bag · ${products[id].name}`);
-  }
-
-  document.addEventListener('click', e => {
-    const addBtn = e.target.closest('[data-add]');
-    if (addBtn) { add(addBtn.dataset.add, addBtn); return; }
-    const inc = e.target.closest('[data-inc]');
-    if (inc) { bag[inc.dataset.inc]++; save(); renderBag(); return; }
-    const dec = e.target.closest('[data-dec]');
-    if (dec) { const k = dec.dataset.dec; bag[k]--; if (bag[k] <= 0) delete bag[k]; save(); renderBag(); return; }
-    const opener = e.target.closest('[data-open-bag]');
-    if (opener) {
-      if (opener.closest('[data-actionbar]') && count() === 0) { scrollToEl($('#counter')); return; }
-      openBag(); return;
-    }
-    const closer = e.target.closest('[data-close-bag]');
-    if (closer && closer.tagName !== 'A') closeBag();
-  });
-
-  let lastFocus = null;
-  function openBag() {
-    lastFocus = document.activeElement;
-    $('[data-bag-done]').hidden = true;
-    $('[data-bag-body]').hidden = false;
-    bagEl.hidden = false;
-    bagOpen = true;
-    requestAnimationFrame(() => requestAnimationFrame(() => bagEl.classList.add('is-open')));
-    lenis && lenis.stop();
-    document.body.style.overflow = 'hidden';
-    setTimeout(() => $('.bag-close', bagEl).focus({ preventScroll: true }), 60);
-  }
-  function closeBag() {
-    if (!bagOpen) return;
-    bagOpen = false;
-    bagEl.classList.remove('is-open');
-    lenis && lenis.start();
-    document.body.style.overflow = '';
-    setTimeout(() => { if (!bagOpen) bagEl.hidden = true; }, 520);
-    if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
-  }
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeBag(); closeMenu(); }
-    if (e.key === 'Tab' && bagOpen) {
-      const f = $$('button, a[href], input, select', $('.bag-panel')).filter(el => el.offsetParent !== null);
-      if (!f.length) return;
-      if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
-      else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
-    }
-  });
-
-  const form = $('[data-bag-form]');
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const err = $('[data-form-error]');
-    const name = form.name.value.trim(), email = form.email.value.trim();
-    form.name.setAttribute('aria-invalid', String(!name));
-    const okMail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email);
-    form.email.setAttribute('aria-invalid', String(!okMail));
-    if (!name || !okMail) { err.textContent = !name ? 'Please add your name.' : 'Please check your email address.'; return; }
-    err.textContent = '';
-    $('[data-done-name]').textContent = name.split(' ')[0];
-    $('[data-done-slot]').textContent = form.slot.value.replace(/^Tomorrow,/, 'tomorrow,');
-    bag = {}; save(); renderBag();
-    form.reset();
-    $('[data-bag-body]').hidden = true;
-    $('[data-bag-done]').hidden = false;
-  });
-  renderBag();
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 
   /* ------------------------------------------------------------------
      Bake board: the bread follows the cursor (desktop)
