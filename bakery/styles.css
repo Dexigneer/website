@@ -498,3 +498,39 @@ body { font-synthesis-weight: none; }
 .hero-cta { margin-bottom: 6px; }
 /* the nav keeps the ink outline readable over the blurred bar */
 .nav.is-dark .nav-cta { --bg: var(--paper); color: var(--ink); }
+
+/* Buttons in a beige a shade deeper than the hero linen */
+:root { --btn: #f0dccf; --btn-hover: #f5e4d9; }
+.btn, .btn--ink, .btn--line, .nav-cta, .nav.is-dark .nav-cta { --bg: var(--btn); }
+.btn:hover, .btn--ink:hover, .btn--line:hover, .nav-cta:hover { --bg: var(--btn-hover); }
+
+/* Mobile menu: the bakery's blush, centred Golden Goose links, a quiet fade */
+.menu {
+  background: var(--blush); color: var(--ink);
+  justify-content: center; align-items: center; text-align: center;
+  padding: calc(var(--nav-h) + 24px) max(16px, var(--gutter)) calc(32px + env(safe-area-inset-bottom));
+  clip-path: none; opacity: 0; transition: opacity .4s ease;
+}
+.menu.is-open { clip-path: none; opacity: 1; }
+.menu nav { align-items: center; gap: 6px; }
+.menu nav a {
+  display: block; padding: 8px 0; border: 0;
+  font: 400 clamp(40px, 12vw, 56px)/1.05 var(--serif); text-transform: uppercase; letter-spacing: 0;
+  opacity: 0; transform: translateY(14px);
+  transition: opacity .5s ease, transform .6s var(--ease-out);
+}
+.menu.is-open nav a { opacity: 1; transform: none; }
+.menu.is-open nav a:nth-child(2) { transition-delay: .06s; }
+.menu.is-open nav a:nth-child(3) { transition-delay: .12s; }
+.menu-foot {
+  position: absolute; left: 0; right: 0; bottom: calc(32px + env(safe-area-inset-bottom));
+  margin: 0; display: flex; flex-direction: column; gap: 4px;
+  font: 400 15px/1.4 var(--sans); letter-spacing: 0; text-transform: none; color: var(--blush-mute);
+}
+.nav.is-menu { background: transparent; color: var(--ink); -webkit-backdrop-filter: none; backdrop-filter: none; transform: none; }
+.menu-btn { box-shadow: none; border: 2px solid var(--ink); background: var(--btn); }
+.menu-btn span { left: 11px; right: 11px; }
+.menu-btn span:first-child { top: 14px; } .menu-btn span:last-child { top: 20px; }
+@media (prefers-reduced-motion: reduce) { .menu nav a { transform: none; } }
+.menu-btn { box-shadow: 3px 4px 0 0 var(--ink); transition: transform .14s var(--ease-out), box-shadow .14s var(--ease-out); }
+.menu-btn:active { transform: translate(3px, 4px); box-shadow: 0 0 0 0 var(--ink); }

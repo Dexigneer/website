@@ -101,17 +101,16 @@
     menu.hidden = false;
     requestAnimationFrame(() => requestAnimationFrame(() => menu.classList.add('is-open')));
     menuBtn.setAttribute('aria-expanded', 'true');
-    nav.classList.add('is-dark-menu');
-    nav.style.color = 'var(--on-dark)';
+    nav.classList.add('is-menu');
     lenis && lenis.stop();
   }
   function closeMenu() {
     if (!menu.classList.contains('is-open')) return;
     menu.classList.remove('is-open');
     menuBtn.setAttribute('aria-expanded', 'false');
-    nav.style.color = '';
+    nav.classList.remove('is-menu');
     lenis && lenis.start();
-    setTimeout(() => { if (!menu.classList.contains('is-open')) menu.hidden = true; }, 700);
+    setTimeout(() => { if (!menu.classList.contains('is-open')) menu.hidden = true; }, 450);
   }
   menuBtn.addEventListener('click', () => (menu.classList.contains('is-open') ? closeMenu() : openMenu()));
 
