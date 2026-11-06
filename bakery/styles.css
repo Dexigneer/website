@@ -48,9 +48,9 @@
   --line-dark: rgba(244, 242, 237, .16);
   --ember: #c4682e;
 
-  --serif: "Joy Digits", "Golden Goose", "Fraunces", Georgia, serif;
-  --sans: "Joy", "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "Joy", "Geist", "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --serif: "Golden Goose", "Fraunces", Georgia, serif;
+  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   --gutter: clamp(16px, 4vw, 56px);
   --max: 1440px;
@@ -505,3 +505,9 @@ body { font-synthesis-weight: none; }
 .card-media, .card:hover .card-media { background: none; overflow: visible; }
 .card-body { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 6px; padding-top: 10px; }
 .card-meta { grid-column: auto; }
+
+/* Joy only where asked: the whole recipe section, and the figures in the process */
+:root { --joy: "Joy", "Geist", ui-sans-serif, system-ui, sans-serif; }
+.recipe .label, .recipe .ing-qty, .recipe .ing-qty small, .recipe .ing-name, .recipe .ing-pct { font-family: var(--joy); }
+.proces .clock, .proces .step-n { font-family: "Joy Digits", var(--mono); }
+.proces .steps p { font-family: "Joy Digits", var(--sans); }
